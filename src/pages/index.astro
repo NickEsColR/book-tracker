@@ -1,11 +1,64 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+import books from "@/books.json";
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import GridBooks from "@/components/GridBooks.astro";
+import Layout from "@/layouts/Layout.astro";
+
+const { library } = books;
+const genres = [...new Set(library.map(({book}) => book.genre))];
 ---
 
 <Layout>
-	<Welcome />
+  <div class="grid grid-cols-1 md:grid-cols-3 md:gap-4 container px-5 mx-auto">
+    <section class="col-span-2">
+        <GridBooks books={library} className="grid-available" showDetails>
+          <div
+            class="flex flex-col text-center w-full mb-20 col-span-full"
+            slot="header"
+          >
+            <h2
+              class="sm:text-3xl text-2xl font-medium title-font mb-4 text-white"
+            >
+              8 Libros Disponibles
+            </h2>
+            <span class="lg:w-2/3 mx-auto leading-relaxed text-base">
+              2 en la lista de lectura
+            </span>
+
+            <form class="grid md:grid-cols-2 gap-4 mt-8 items-center">
+              <div class="flex flex-col xl:flex-row gap-2 items-center">
+                <label> Filtrar por número de páginas </label>
+                <input
+                  type="number"
+                  class="bg-gray-800 bg-opacity-40 rounded border border-gray-700 text-base outline-none text-white py-1 px-3"
+                />
+              </div>
+              <div class="flex flex-col xl:flex-row gap-2 items-center">
+                <label> Filtrar por género </label>
+                <select
+                  class="bg-gray-800 bg-opacity-40 rounded border border-gray-700 text-base outline-none text-white py-1 px-3"
+                >
+                  <option value="all">Todos</option>
+                  {
+                    genres.map((genre) => (
+                      <option value={genre}>{genre}</option>
+                    ))
+                  }
+                </select>
+              </div>
+            </form>
+          </div>
+        </GridBooks>
+    </section>
+    <section class="w-full">
+      <GridBooks books={library} className="grid-lecture-list">
+        <h3
+          class="sm:text-3xl text-2xl font-medium title-font mb-4 text-white col-span-full"
+          slot="header"
+        >
+          Lista de lectura
+        </h3>
+      </GridBooks>
+    </section>
+  </div>
 </Layout>
