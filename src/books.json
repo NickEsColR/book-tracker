@@ -1,236 +1,121 @@
 {
-  "library": [
+  "docs": [
     {
-      "book": {
-        "title": "El Señor de los Anillos",
-        "pages": 1200,
-        "genre": "Fantasía",
-        "cover": "https://th.bing.com/th/id/OIP.O9Gei220GEyrFJ_Iv5duZwAAAA?w=196&h=299&c=7&r=0&o=5&dpr=1.3&pid=1.7",
-        "synopsis": "Una aventura épica en un mundo de fantasía llamado la Tierra Media.",
-        "year": 1954,
-        "ISBN": "978-0618640157",
-        "author": {
-          "name": "J.R.R. Tolkien",
-          "otherBooks": [
-            "El Hobbit",
-            "El Silmarillion"
-          ]
-        }
-      }
+      "title": "El Señor de los Anillos",
+      "number_of_pages_median": 1200,
+      "subject": ["Fantasía"],
+      "cover_i": "https://th.bing.com/th/id/OIP.O9Gei220GEyrFJ_Iv5duZwAAAA?w=196&h=299&c=7&r=0&o=5&dpr=1.3&pid=1.7",
+      "first_publish_year": 1954,
+      "isbn": ["978-0618640157"],
+      "author_name": ["J.R.R. Tolkien"]
     },
     {
-      "book": {
-        "title": "Juego de Tronos",
-        "pages": 694,
-        "genre": "Fantasía",
-        "cover": "https://th.bing.com/th/id/OIP.jfFefYKlFUVy_okHQHxYJwHaJF?w=150&h=184&c=7&r=0&o=5&dpr=1.3&pid=1.7",
-        "synopsis": "En un reino donde las estaciones duran años, una batalla épica por el trono se desarrolla.",
-        "year": 1996,
-        "ISBN": "978-0553103540",
-        "author": {
-          "name": "George R. R. Martin",
-          "otherBooks": [
-            "Choque de Reyes",
-            "Tormenta de Espadas",
-            "Festín de Cuervos"
-          ]
-        }
-      }
+      "title": "Juego de Tronos",
+      "number_of_pages_median": 694,
+      "subject": ["Fantasía"],
+      "cover_i": "https://th.bing.com/th/id/OIP.jfFefYKlFUVy_okHQHxYJwHaJF?w=150&h=184&c=7&r=0&o=5&dpr=1.3&pid=1.7",
+      "first_publish_year": 1996,
+      "isbn": ["978-0553103540"],
+      "author_name": ["George R. R. Martin"]
     },
     {
-      "book": {
-        "title": "Harry Potter y la piedra filosofal",
-        "pages": 223,
-        "genre": "Fantasía",
-        "cover": "https://th.bing.com/th/id/OIP.AoJz71JQaMLmDPWGPcEbDAHaL3?w=115&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7",
-        "synopsis": "Un niño descubre que es un mago y comienza una aventura en una escuela de magia.",
-        "year": 1997,
-        "ISBN": "978-0747532699",
-        "author": {
-          "name": "J.K. Rowling",
-          "otherBooks": [
-            "Harry Potter y la cámara secreta",
-            "Harry Potter y el prisionero de Azkaban",
-            "Harry Potter y el cáliz de fuego"
-          ]
-        }
-      }
+      "title": "Harry Potter y la piedra filosofal",
+      "number_of_pages_median": 223,
+      "subject": ["Fantasía"],
+      "cover_i": "https://th.bing.com/th/id/OIP.AoJz71JQaMLmDPWGPcEbDAHaL3?w=115&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7",
+      "first_publish_year": 1997,
+      "isbn": ["978-0747532699"],
+      "author_name": ["J.K. Rowling"]
     },
     {
-      "book": {
-        "title": "1984",
-        "pages": 328,
-        "genre": "Ciencia ficción",
-        "cover": "https://th.bing.com/th/id/OIP.fj3XeDdO1BDLPVH0wuc7WwHaLX?w=110&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7",
-        "synopsis": "Una inquietante visión de un futuro distópico y totalitario.",
-        "year": 1949,
-        "ISBN": "978-0451524935",
-        "author": {
-          "name": "George Orwell",
-          "otherBooks": [
-            "Rebelión en la granja"
-          ]
-        }
-      }
+      "title": "1984",
+      "number_of_pages_median": 328,
+      "subject": ["Ciencia ficción"],
+      "cover_i": "https://th.bing.com/th/id/OIP.fj3XeDdO1BDLPVH0wuc7WwHaLX?w=110&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7",
+      "first_publish_year": 1949,
+      "isbn": ["978-0451524935"],
+      "author_name": ["George Orwell"]
     },
     {
-      "book": {
-        "title": "Apocalipsis Zombie",
-        "pages": 444,
-        "genre": "Zombies",
-        "cover": "https://th.bing.com/th/id/OIP.R3D-jCCKCi2QaGTGRdt2rAHaLQ?w=196&h=299&c=7&r=0&o=5&dpr=1.3&pid=1.7",
-        "synopsis": "Un gallego se queda en casa en pleno apocalipsis zombie y acaba casi salvando el mundo",
-        "year": 2001,
-        "ISBN": "978-4444532611",
-        "author": {
-          "name": "Manel Loreiro",
-          "otherBooks": []
-        }
-      }
+      "title": "Apocalipsis Zombie",
+      "number_of_pages_median": 444,
+      "subject": ["Zombies"],
+      "cover_i": "https://th.bing.com/th/id/OIP.R3D-jCCKCi2QaGTGRdt2rAHaLQ?w=196&h=299&c=7&r=0&o=5&dpr=1.3&pid=1.7",
+      "first_publish_year": 2001,
+      "isbn": ["978-4444532611"],
+      "author_name": ["Manel Loreiro"]
     },
     {
-      "book": {
-        "title": "Dune",
-        "pages": 412,
-        "genre": "Ciencia ficción",
-        "cover": "https://th.bing.com/th/id/OIP.lsVpOkJHaE02u95czazI6AAAAA?w=196&h=302&c=7&r=0&o=5&dpr=1.3&pid=1.7",
-        "synopsis": "En el inhóspito planeta desértico de Arrakis, una gran intriga política y familiar se desarrolla.",
-        "year": 1965,
-        "ISBN": "978-0441172719",
-        "author": {
-          "name": "Frank Herbert",
-          "otherBooks": [
-            "El mesías de Dune",
-            "Hijos de Dune"
-          ]
-        }
-      }
+      "title": "Dune",
+      "number_of_pages_median": 412,
+      "subject": ["Ciencia ficción"],
+      "cover_i": "https://th.bing.com/th/id/OIP.lsVpOkJHaE02u95czazI6AAAAA?w=196&h=302&c=7&r=0&o=5&dpr=1.3&pid=1.7",
+      "first_publish_year": 1965,
+      "isbn": ["978-0441172719"],
+      "author_name": ["Frank Herbert"]
     },
     {
-      "book": {
-        "title": "La Guía del Autoestopista Galáctico",
-        "pages": 216,
-        "genre": "Ciencia ficción",
-        "cover": "https://th.bing.com/th/id/OIP.sVKffECutayJ-aJnuHjFqQHaLQ?w=115&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7",
-        "synopsis": "Un viaje absurdo y cómico por el espacio, con toallas.",
-        "year": 1979,
-        "ISBN": "978-0345391803",
-        "author": {
-          "name": "Douglas Adams",
-          "otherBooks": [
-            "El restaurante del fin del mundo",
-            "La vida, el universo y todo lo demás"
-          ]
-        }
-      }
+      "title": "La Guía del Autoestopista Galáctico",
+      "number_of_pages_median": 216,
+      "subject": ["Ciencia ficción"],
+      "cover_i": "https://th.bing.com/th/id/OIP.sVKffECutayJ-aJnuHjFqQHaLQ?w=115&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7",
+      "first_publish_year": 1979,
+      "isbn": ["978-0345391803"],
+      "author_name": ["Douglas Adams"]
     },
     {
-      "book": {
-        "title": "Neuromante",
-        "pages": 271,
-        "genre": "Ciencia ficción",
-        "cover": "https://th.bing.com/th/id/OIP.CtO3k3mfmtyZvmn_V9zTzwAAAA?w=196&h=314&c=7&r=0&o=5&dpr=1.3&pid=1.7",
-        "synopsis": "Una visión profética de la ciber-realidad y la inteligencia artificial.",
-        "year": 1984,
-        "ISBN": "978-0441569595",
-        "author": {
-          "name": "William Gibson",
-          "otherBooks": [
-            "Conde Cero",
-            "Mona Lisa Acelerada"
-          ]
-        }
-      }
+      "title": "Neuromante",
+      "number_of_pages_median": 271,
+      "subject": ["Ciencia ficción"],
+      "cover_i": "https://th.bing.com/th/id/OIP.CtO3k3mfmtyZvmn_V9zTzwAAAA?w=196&h=314&c=7&r=0&o=5&dpr=1.3&pid=1.7",
+      "first_publish_year": 1984,
+      "isbn": ["978-0441569595"],
+      "author_name": ["William Gibson"]
     },
     {
-      "book": {
-        "title": "Fahrenheit 451",
-        "pages": 249,
-        "genre": "Ciencia ficción",
-        "cover": "https://th.bing.com/th/id/OIP.PnbC_Fo_nqWvvdNLoewukAHaLH?w=196&h=294&c=7&r=0&o=5&dpr=1.3&pid=1.7",
-        "synopsis": "Una sociedad futura donde los libros están prohibidos y 'bomberos' queman cualquier libro que encuentren.",
-        "year": 1953,
-        "ISBN": "978-1451673319",
-        "author": {
-          "name": "Ray Bradbury",
-          "otherBooks": [
-            "Crónicas marcianas",
-            "El hombre ilustrado"
-          ]
-        }
-      }
+      "title": "Fahrenheit 451",
+      "number_of_pages_median": 249,
+      "subject": ["Ciencia ficción"],
+      "cover_i": "https://th.bing.com/th/id/OIP.PnbC_Fo_nqWvvdNLoewukAHaLH?w=196&h=294&c=7&r=0&o=5&dpr=1.3&pid=1.7",
+      "first_publish_year": 1953,
+      "isbn": ["978-1451673319"],
+      "author_name": ["Ray Bradbury"]
     },
     {
-      "book": {
-        "title": "El resplandor",
-        "pages": 688,
-        "genre": "Terror",
-        "cover": "https://th.bing.com/th/id/OIP.KaXq5M-Wgq_FeImY1mU_0wHaLK?w=196&h=295&c=7&r=0&o=5&dpr=1.3&pid=1.7",
-        "synopsis": "Una familia se muda a un hotel aislado para el invierno donde una presencia siniestra influye en el padre hacia la violencia.",
-        "year": 1977,
-        "ISBN": "978-0307743657",
-        "author": {
-          "name": "Stephen King",
-          "otherBooks": [
-            "Carrie",
-            "It"
-          ]
-        }
-      }
+      "title": "El resplandor",
+      "number_of_pages_median": 688,
+      "subject": ["Terror"],
+      "cover_i": "https://th.bing.com/th/id/OIP.KaXq5M-Wgq_FeImY1mU_0wHaLK?w=196&h=295&c=7&r=0&o=5&dpr=1.3&pid=1.7",
+      "first_publish_year": 1977,
+      "isbn": ["978-0307743657"],
+      "author_name": ["Stephen King"]
     },
     {
-      "book": {
-        "title": "Drácula",
-        "pages": 418,
-        "genre": "Terror",
-        "cover": "https://th.bing.com/th/id/OIP.o5h0fTCzjfoR6-LaamEnAwHaLH?w=196&h=294&c=7&r=0&o=5&dpr=1.3&pid=1.7",
-        "synopsis": "La historia del infame conde Drácula y su intento de mudarse de Transilvania a Inglaterra.",
-        "year": 1897,
-        "ISBN": "978-0486411095",
-        "author": {
-          "name": "Bram Stoker",
-          "otherBooks": [
-            "La joya de las siete estrellas",
-            "La madriguera del gusano blanco"
-          ]
-        }
-      }
+      "title": "Drácula",
+      "number_of_pages_median": 418,
+      "subject": ["Terror"],
+      "cover_i": "https://th.bing.com/th/id/OIP.o5h0fTCzjfoR6-LaamEnAwHaLH?w=196&h=294&c=7&r=0&o=5&dpr=1.3&pid=1.7",
+      "first_publish_year": 1897,
+      "isbn": ["978-0486411095"],
+      "author_name": ["Bram Stoker"]
     },
     {
-      "book": {
-        "title": "Frankenstein",
-        "pages": 280,
-        "genre": "Terror",
-        "cover": "https://th.bing.com/th/id/OIP.zhayJRzA99jM0NzDW8hDhQHaKl?w=196&h=279&c=7&r=0&o=5&dpr=1.3&pid=1.7",
-        "synopsis": "Un científico obsesionado crea una criatura viva a partir de partes de cuerpos robadas, con consecuencias desastrosas.",
-        "year": 1818,
-        "ISBN": "978-0486282114",
-        "author": {
-          "name": "Mary Shelley",
-          "otherBooks": [
-            "El último hombre",
-            "Valperga"
-          ]
-        }
-      }
+      "title": "Frankenstein",
+      "number_of_pages_median": 280,
+      "subject": ["Terror"],
+      "cover_i": "https://th.bing.com/th/id/OIP.zhayJRzA99jM0NzDW8hDhQHaKl?w=196&h=279&c=7&r=0&o=5&dpr=1.3&pid=1.7",
+      "first_publish_year": 1818,
+      "isbn": ["978-0486282114"],
+      "author_name": ["Mary Shelley"]
     },
     {
-      "book": {
-        "title": "La llamada de Cthulhu",
-        "pages": 43,
-        "genre": "Terror",
-        "cover": "https://th.bing.com/th/id/OIP.kE0gvKzs2IU10K7WmzViQgAAAA?w=115&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7",
-        "synopsis": "La historia de un monstruo ancestral que amenaza con revivir y dominar el mundo.",
-        "year": 1928,
-        "ISBN": "978-1542461690",
-        "author": {
-          "name": "H.P. Lovecraft",
-          "otherBooks": [
-            "El horror de Dunwich",
-            "En las montañas de la locura"
-          ]
-        }
-      }
+      "title": "La llamada de Cthulhu",
+      "number_of_pages_median": 43,
+      "subject": ["Terror"],
+      "cover_i": "https://th.bing.com/th/id/OIP.kE0gvKzs2IU10K7WmzViQgAAAA?w=115&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7",
+      "first_publish_year": 1928,
+      "isbn": ["978-1542461690"],
+      "author_name": ["H.P. Lovecraft"]
     }
   ]
 }

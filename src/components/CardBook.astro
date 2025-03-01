@@ -1,19 +1,19 @@
 ---
 interface Props {
-  author: string;
-  genre: string;
+  authors: string[];
+  genres: string[];
   image: string;
-  synopsis: string;
+  pagesNumber: number;
   title: string;
   year: number;
   showDetails?: boolean;
 }
 
 const {
-  author,
-  genre,
+  authors,
+  genres,
   image,
-  synopsis,
+  pagesNumber,
   title,
   year,
   showDetails = false,
@@ -31,17 +31,17 @@ const {
       <div class="flex flex-col px-4 py-5 relative z-10 w-full border-4 border-gray-800 bg-gray-900 opacity-0 hover:opacity-100">
         <h4 class="text-lg font-medium text-white mb-3">{title}</h4>
         <span class="tracking-widest text-sm font-medium text-indigo-400 mb-1">
-          <strong>Author:</strong>
-          {author}
+          <strong>Autor{authors.length > 1 ? "es":""}:</strong>
+          {authors.join(", ")}
         </span>
         <span class="tracking-widest text-sm font-medium text-indigo-400 mb-1">
-          <strong>Genero:</strong>
-          {genre}
+          <strong>Genero{genres.length > 1 ? "s":""}:</strong>
+          {genres.join(", ")}
         </span>
         <span class="tracking-widest text-sm font-medium text-amber-200 mb-1">
           Publicado en {year}
         </span>
-        <p class="leading-relaxed">{synopsis}</p>
+        <p class="leading-relaxed">{pagesNumber} páginas</p>
       </div>
     )
   }

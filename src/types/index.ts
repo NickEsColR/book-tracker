@@ -1,23 +1,13 @@
-export interface Library {
-  books: Books[];
+export interface OpenLibraryResponse {
+  docs: Doc[];
 }
 
-export interface Books {
-  book: Book;
-}
-
-export interface Book {
-  title:    string;
-  pages:    number;
-  genre:    string;
-  cover:    string;
-  synopsis: string;
-  year:     number;
-  ISBN:     string;
-  author:   Author;
-}
-
-export interface Author {
-  name:       string;
-  otherBooks: string[];
+export interface Doc {
+  title:                  string;
+  number_of_pages_median: number;
+  subject:                string[];
+  cover_i:                string;
+  first_publish_year:     number;
+  isbn:                   string[];
+  author_name:            string[];
 }

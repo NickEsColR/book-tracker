@@ -1,11 +1,9 @@
 ---
 import CardBook from "@/components/CardBook.astro";
-import type { Book } from "@/types";
+import type { Doc } from "@/types";
 
 interface Props {
-  books: {
-    book: Book;
-  }[];
+  books: Doc[];
   className?: string;
   showDetails?: boolean;
 }
@@ -15,14 +13,14 @@ const { books, className, showDetails } = Astro.props;
 <div class=`grid gap-4 ${className}`>
   <slot name="header"/>
   {
-    books.map(({ book }) => (
+    books.map(({ author_name, cover_i, first_publish_year,isbn,number_of_pages_median,subject,title }) => (
       <CardBook
-        author={book.author.name}
-        genre={book.genre}
-        image={book.cover}
-        synopsis={book.synopsis}
-        title={book.title}
-        year={book.year}
+        authors={author_name}
+        genres={subject}
+        image={cover_i}
+        pagesNumber={number_of_pages_median}
+        title={title}
+        year={first_publish_year}
         showDetails={showDetails}
       />
     ))
