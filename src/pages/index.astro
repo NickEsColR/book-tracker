@@ -4,6 +4,8 @@ import sample from "@/books.json";
 import GridBooks from "@/components/GridBooks.astro";
 import Layout from "@/layouts/Layout.astro";
 
+export const prerender = false;
+
 const { docs: books } = sample;
 const genres = Array.from(
   books.reduce((acc, { subject }) => {
@@ -11,12 +13,26 @@ const genres = Array.from(
     return acc;
   }, new Set<string>())
 );
+const maxPage = Math.max(...books.map(({ number_of_pages_median }) => number_of_pages_median));
+const minPage = Math.min(...books.map(({ number_of_pages_median }) => number_of_pages_median));
+
+const { url } = Astro.request;
+const { searchParams } = new URL(url);
+const minPageSelected = searchParams.get("min-pages") || minPage;
+const maxPageSelected = searchParams.get("max-pages") || maxPage;
+const genreSelected = searchParams.get("genre") || "all";
+const filteredBooks = books.filter(
+  ({ number_of_pages_median, subject }) =>
+    number_of_pages_median >= +minPageSelected &&
+    number_of_pages_median <= +maxPageSelected &&
+    (genreSelected === "all" || subject.includes(genreSelected))
+);
 ---
 
 <Layout>
   <div class="grid grid-cols-1 md:grid-cols-3 md:gap-4 container px-5 mx-auto">
     <section class="col-span-2">
-      <GridBooks books={books} className="grid-available" showDetails>
+      <GridBooks books={filteredBooks} className="grid-available" showDetails>
         <div
           class="flex flex-col text-center w-full mb-20 col-span-full"
           slot="header"
@@ -40,6 +56,7 @@ const genres = Array.from(
                   name="min-pages"
                   placeholder="0"
                   class="bg-gray-800 bg-opacity-40 rounded border border-gray-700 text-base outline-none text-white py-1 px-3 w-20"
+                  value={minPageSelected}
                 />
                 -
                 <input
@@ -48,6 +65,7 @@ const genres = Array.from(
                   name="max-pages"
                   placeholder="1000"
                   class="bg-gray-800 bg-opacity-40 rounded border border-gray-700 text-base outline-none text-white py-1 px-3 w-20"
+                  value={maxPageSelected}
                 />
               </div>
             </div>
@@ -55,9 +73,11 @@ const genres = Array.from(
               <label> Filtrar por género </label>
               <select
                 class="bg-gray-800 bg-opacity-40 rounded border border-gray-700 text-base outline-none text-white py-1 px-3"
+                name="genre"
+                id="genre"
               >
                 <option value="all">Todos</option>
-                {genres.map((genre) => <option value={genre}>{genre}</option>)}
+                {genres.map((genre) => <option value={genre} selected={genre == genreSelected}>{genre}</option>)}
               </select>
             </div>
           </form>
@@ -76,3 +96,30 @@ const genres = Array.from(
     </section>
   </div>
 </Layout>
+
+<script>
+  const minPagesInput = document.querySelector("#min-pages") as HTMLInputElement;
+  const maxPagesInput = document.querySelector("#max-pages") as HTMLInputElement;
+  const genreInput = document.querySelector("#genre") as HTMLSelectElement;
+
+  genreInput.addEventListener("change", () => {
+    const url = new URL(window.location.href);
+    url.searchParams.set("genre", genreInput.value);
+    //history.pushState({}, "", url.toString());
+    window.location.href = url.toString();
+  });
+
+  minPagesInput.addEventListener("change", () => {
+    const url = new URL(window.location.href);
+    url.searchParams.set("min-pages", minPagesInput.value);
+    //history.pushState({}, "", url.toString());
+    window.location.href = url.toString();
+  });
+
+  maxPagesInput.addEventListener("change", () => {
+    const url = new URL(window.location.href);
+    url.searchParams.set("max-pages", maxPagesInput.value);
+    //history.pushState({}, "", url.toString());
+    window.location.href = url.toString();
+  });
+</script>
