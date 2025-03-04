@@ -3,9 +3,11 @@ interface Props {
   authors: string[];
   genres: string[];
   image: string;
+  isbn: string;
   pagesNumber: number;
   title: string;
   year: number;
+  isDraggable?: boolean;
   showDetails?: boolean;
 }
 
@@ -13,14 +15,20 @@ const {
   authors,
   genres,
   image,
+  isbn,
   pagesNumber,
   title,
   year,
+  isDraggable = false,
   showDetails = false,
 } = Astro.props;
 ---
 
-<div class="flex relative min-h-80">
+<div
+  class="flex relative w-full aspect-[9/16]"
+  id={isbn}
+  {...(isDraggable && { draggable: true, ondragstart: "drag(event)", ondragend: "endDrag(event)"})}
+>
   <img
     alt={title}
     class="absolute inset-0 w-full h-full object-fill object-center"
@@ -28,14 +36,14 @@ const {
   />
   {
     showDetails && (
-      <div class="flex flex-col px-4 py-5 relative z-10 w-full border-4 border-gray-800 bg-gray-900 opacity-0 hover:opacity-100">
+      <div class="flex flex-col px-4 py-5 relative z-10 w-full border-4 border-gray-800 bg-gray-900 opacity-0 hover:opacity-100 details">
         <h4 class="text-lg font-medium text-white mb-3">{title}</h4>
         <span class="tracking-widest text-sm font-medium text-indigo-400 mb-1">
-          <strong>Autor{authors.length > 1 ? "es":""}:</strong>
+          <strong>Autor{authors.length > 1 ? "es" : ""}:</strong>
           {authors.join(", ")}
         </span>
         <span class="tracking-widest text-sm font-medium text-indigo-400 mb-1">
-          <strong>Genero{genres.length > 1 ? "s":""}:</strong>
+          <strong>Genero{genres.length > 1 ? "s" : ""}:</strong>
           {genres.join(", ")}
         </span>
         <span class="tracking-widest text-sm font-medium text-amber-200 mb-1">
@@ -46,3 +54,22 @@ const {
     )
   }
 </div>
+
+<script is:inline>
+
+  function drag(e) {
+    const card = e.target
+    card.classList.add('dragging');
+    e.dataTransfer.setData("book", card.id);
+  }
+  function endDrag(e) {
+    const card = e.target;
+    card.classList.remove('dragging');
+  }
+</script>
+
+<style>
+  .dragging .details {
+    opacity: 0;
+  }
+</style>

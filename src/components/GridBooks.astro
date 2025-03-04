@@ -5,24 +5,67 @@ import type { Doc } from "@/types";
 interface Props {
   books: Doc[];
   className?: string;
+  dropable?: boolean;
   showDetails?: boolean;
 }
 
-const { books, className, showDetails } = Astro.props;
+const { books, className, dropable, showDetails } = Astro.props;
 ---
+
 <div class=`grid gap-4 ${className}`>
-  <slot name="header"/>
+  <slot name="header" />
   {
-    books.map(({ author_name, cover_i, first_publish_year,isbn,number_of_pages_median,subject,title }) => (
-      <CardBook
-        authors={author_name}
-        genres={subject}
-        image={cover_i}
-        pagesNumber={number_of_pages_median}
-        title={title}
-        year={first_publish_year}
-        showDetails={showDetails}
-      />
-    ))
+    books.map(
+      ({
+        author_name,
+        cover_i,
+        first_publish_year,
+        isbn,
+        number_of_pages_median,
+        subject,
+        title,
+      }) => (
+        <CardBook
+          authors={author_name}
+          genres={subject}
+          image={cover_i}
+          isbn={isbn[0]}
+          pagesNumber={number_of_pages_median}
+          title={title}
+          year={first_publish_year}
+          isDraggable={showDetails}
+          showDetails={showDetails}
+        />
+      )
+    )
+  }
+  {
+    dropable && (
+      <div
+        class="w-full aspect-[9/16] border-4 border-dashed border-gray-400 flex items-center justify-center text-pretty text-center"
+        ondrop="drop(event)"
+        ondragover="allowDrop(event)"
+      >
+        Agrega tus Libros aquí
+      </div>
+    )
   }
 </div>
+
+<script is:inline>
+  function allowDrop(e) {
+    e.preventDefault();
+  }
+
+  function drop(e) {
+    e.preventDefault();
+    const data = e.dataTransfer.getData("book");
+    const card = document.getElementById(data);
+    const cardClone = card.cloneNode(true);
+    cardClone.removeChild(cardClone.querySelector("div"));
+    cardClone.removeAttribute("draggable");
+    cardClone.removeAttribute("ondragstart");
+    cardClone.classList.remove('dragging');
+    e.target.parentNode.insertBefore(cardClone, e.target);
+  }
+</script>
