@@ -13,11 +13,15 @@ const genres = Array.from(
     return acc;
   }, new Set<string>())
 );
-const maxPage = Math.max(...books.map(({ number_of_pages_median }) => number_of_pages_median));
-const minPage = Math.min(...books.map(({ number_of_pages_median }) => number_of_pages_median));
+const maxPage = Math.max(
+  ...books.map(({ number_of_pages_median }) => number_of_pages_median)
+);
+const minPage = Math.min(
+  ...books.map(({ number_of_pages_median }) => number_of_pages_median)
+);
 
-const { url } = Astro.request;
-const { searchParams } = new URL(url);
+const { request } = Astro;
+const { searchParams } = new URL(request.url);
 const minPageSelected = searchParams.get("min-pages") || minPage;
 const maxPageSelected = searchParams.get("max-pages") || maxPage;
 const genreSelected = searchParams.get("genre") || "all";
@@ -41,10 +45,12 @@ const availableBooks = filteredBooks.length;
           <h2
             class="sm:text-3xl text-2xl font-medium title-font mb-4 text-white"
           >
-            <span id="number-available" class="font-semibold">{availableBooks}</span> Libros Disponibles
+            <span id="number-available" class="font-semibold"
+              >{availableBooks}</span
+            > Libros Disponibles
           </h2>
           <span class="lg:w-2/3 mx-auto leading-relaxed text-base">
-            2 en la lista de lectura
+            <span id="number-lecture-list">0</span> en la lista de lectura
           </span>
 
           <form class="grid md:grid-cols-2 gap-4 mt-8 items-center">
@@ -78,7 +84,13 @@ const availableBooks = filteredBooks.length;
                 id="genre"
               >
                 <option value="all">Todos</option>
-                {genres.map((genre) => <option value={genre} selected={genre == genreSelected}>{genre}</option>)}
+                {
+                  genres.map((genre) => (
+                    <option value={genre} selected={genre == genreSelected}>
+                      {genre}
+                    </option>
+                  ))
+                }
               </select>
             </div>
           </form>
@@ -99,8 +111,12 @@ const availableBooks = filteredBooks.length;
 </Layout>
 
 <script>
-  const minPagesInput = document.querySelector("#min-pages") as HTMLInputElement;
-  const maxPagesInput = document.querySelector("#max-pages") as HTMLInputElement;
+  const minPagesInput = document.querySelector(
+    "#min-pages"
+  ) as HTMLInputElement;
+  const maxPagesInput = document.querySelector(
+    "#max-pages"
+  ) as HTMLInputElement;
   const genreInput = document.querySelector("#genre") as HTMLSelectElement;
 
   genreInput.addEventListener("change", () => {
@@ -122,5 +138,37 @@ const availableBooks = filteredBooks.length;
     url.searchParams.set("max-pages", maxPagesInput.value);
     //history.pushState({}, "", url.toString());
     window.location.href = url.toString();
+  });
+</script>
+
+<script is:inline define:vars={{minPageSelected, maxPageSelected, genreSelected}}>
+  const lectureListCount = document.querySelector("#number-lecture-list");
+  const availableCount = document.querySelector("#number-available");
+  const gridLectureList = document.querySelector(".grid-lecture-list");
+
+  // Get books in locals storage
+  const books = JSON.parse(localStorage.getItem("books")) || [];
+
+  // Filter books with query params
+  const booksFiltered = books.filter(
+    ({ number_of_pages_median, subject }) =>
+      number_of_pages_median >= +minPageSelected &&
+      number_of_pages_median <= +maxPageSelected &&
+      (genreSelected === "all" || subject.includes(genreSelected))
+  );
+
+  lectureListCount.textContent = booksFiltered.length;
+  availableCount.textContent = availableCount.textContent - booksFiltered.length;
+
+  // Move books from available to lecture list
+  booksFiltered.forEach((book) => {
+    const card = document.getElementById(book.isbn.join(","));
+    const cardClone = card.cloneNode(true);
+    cardClone.removeChild(cardClone.querySelector("div"));
+    cardClone.removeAttribute("draggable");
+    cardClone.removeAttribute("ondragstart");
+    cardClone.removeAttribute("ondragend");
+    gridLectureList.appendChild(cardClone);
+    card.parentNode.removeChild(card);
   });
 </script>

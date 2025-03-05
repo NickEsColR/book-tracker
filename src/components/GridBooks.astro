@@ -1,9 +1,9 @@
 ---
 import CardBook from "@/components/CardBook.astro";
-import type { Doc } from "@/types";
+import type { Book } from "@/types";
 
 interface Props {
-  books: Doc[];
+  books: Book[];
   className?: string;
   dropable?: boolean;
   showDetails?: boolean;
@@ -16,23 +16,9 @@ const { books, className, dropable, showDetails } = Astro.props;
   <slot name="header" />
   {
     books.map(
-      ({
-        author_name,
-        cover_i,
-        first_publish_year,
-        isbn,
-        number_of_pages_median,
-        subject,
-        title,
-      }) => (
+      (book) => (
         <CardBook
-          authors={author_name}
-          genres={subject}
-          image={cover_i}
-          isbn={isbn[0]}
-          pagesNumber={number_of_pages_median}
-          title={title}
-          year={first_publish_year}
+          book={book}
           isDraggable={showDetails}
           showDetails={showDetails}
         />
@@ -61,11 +47,31 @@ const { books, className, dropable, showDetails } = Astro.props;
     e.preventDefault();
     const data = e.dataTransfer.getData("book");
     const card = document.getElementById(data);
+    // store the book to cookies storage
+    const book = card.getAttribute("data-book");
+    const bookObj = JSON.parse(book);
+    let books = JSON.parse(localStorage.getItem("books")) || [];
+    books.push(bookObj);
+    localStorage.setItem("books", JSON.stringify(books));
+    
+    // create a new card with the book data
     const cardClone = card.cloneNode(true);
     cardClone.removeChild(cardClone.querySelector("div"));
     cardClone.removeAttribute("draggable");
     cardClone.removeAttribute("ondragstart");
+    cardClone.removeAttribute("ondragend");
     cardClone.classList.remove('dragging');
-    e.target.parentNode.insertBefore(cardClone, e.target);
+    e.target.parentNode.appendChild(cardClone, e.target);
+    
+    // remove card from the grid
+    card.parentNode.removeChild(card);
+
+    // update the counter in the lecture list
+    const counter = document.getElementById("number-lecture-list");
+    counter.innerText = books.length;
+
+    // update the counter in the grid
+    const counterGrid = document.getElementById("number-available");
+    counterGrid.innerText = parseInt(counterGrid.innerText) - 1;
   }
 </script>

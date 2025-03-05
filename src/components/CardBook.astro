@@ -1,32 +1,32 @@
 ---
+import type { Book } from '@/types';
 interface Props {
-  authors: string[];
-  genres: string[];
-  image: string;
-  isbn: string;
-  pagesNumber: number;
-  title: string;
-  year: number;
+  book: Book;
   isDraggable?: boolean;
   showDetails?: boolean;
 }
 
 const {
-  authors,
-  genres,
-  image,
-  isbn,
-  pagesNumber,
-  title,
-  year,
+  book,
   isDraggable = false,
   showDetails = false,
 } = Astro.props;
+
+const {
+  author_name:authors,
+  subject:genres,
+  cover_i:image,
+  isbn,
+  number_of_pages_median:pagesNumber,
+  title,
+  first_publish_year:year,
+} = book;
 ---
 
 <div
   class="flex relative w-full aspect-[9/16]"
-  id={isbn}
+  id={isbn.join(",")}
+  data-book={JSON.stringify(book)}
   {...(isDraggable && { draggable: true, ondragstart: "drag(event)", ondragend: "endDrag(event)"})}
 >
   <img

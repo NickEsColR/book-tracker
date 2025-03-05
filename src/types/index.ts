@@ -1,8 +1,8 @@
 export interface OpenLibraryResponse {
-  docs: Doc[];
+  docs: Book[];
 }
 
-export interface Doc {
+export interface Book {
   title:                  string;
   number_of_pages_median: number;
   subject:                string[];
