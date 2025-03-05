@@ -9,7 +9,7 @@ interface Props {
   showDetails?: boolean;
 }
 
-const { books, className, dropable, showDetails } = Astro.props;
+const { books, className, dropable = false, showDetails = false } = Astro.props;
 ---
 
 <div class=`grid gap-4 ${className}`>

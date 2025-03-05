@@ -1,5 +1,6 @@
 ---
 import sample from "@/books.json";
+import DialogBookForm from "@/components/DialogBookForm.astro";
 
 import GridBooks from "@/components/GridBooks.astro";
 import Layout from "@/layouts/Layout.astro";
@@ -35,6 +36,7 @@ const availableBooks = filteredBooks.length;
 ---
 
 <Layout>
+  <DialogBookForm/>
   <div class="grid grid-cols-1 md:grid-cols-3 md:gap-4 container px-5 mx-auto">
     <section class="col-span-2">
       <GridBooks books={filteredBooks} className="grid-available" showDetails>
@@ -168,6 +170,7 @@ const availableBooks = filteredBooks.length;
     cardClone.removeAttribute("draggable");
     cardClone.removeAttribute("ondragstart");
     cardClone.removeAttribute("ondragend");
+    cardClone.classList.add("openDialog");
     gridLectureList.appendChild(cardClone);
     card.parentNode.removeChild(card);
   });

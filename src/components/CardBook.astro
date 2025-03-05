@@ -1,33 +1,38 @@
 ---
-import type { Book } from '@/types';
+import type { Book } from "@/types";
 interface Props {
   book: Book;
   isDraggable?: boolean;
   showDetails?: boolean;
 }
 
-const {
-  book,
-  isDraggable = false,
-  showDetails = false,
-} = Astro.props;
+const { book, isDraggable = false, showDetails = false } = Astro.props;
 
 const {
-  author_name:authors,
-  subject:genres,
-  cover_i:image,
+  author_name: authors,
+  subject: genres,
+  cover_i: image,
   isbn,
-  number_of_pages_median:pagesNumber,
+  number_of_pages_median: pagesNumber,
   title,
-  first_publish_year:year,
+  first_publish_year: year,
 } = book;
 ---
 
 <div
-  class="flex relative w-full aspect-[9/16]"
+  class:list={[
+    "flex relative w-full aspect-[9/16]",
+    {
+      openDialog: !showDetails,
+    },
+  ]}
   id={isbn.join(",")}
   data-book={JSON.stringify(book)}
-  {...(isDraggable && { draggable: true, ondragstart: "drag(event)", ondragend: "endDrag(event)"})}
+  {...isDraggable && {
+    draggable: true,
+    ondragstart: "drag(event)",
+    ondragend: "endDrag(event)",
+  }}
 >
   <img
     alt={title}
@@ -56,20 +61,42 @@ const {
 </div>
 
 <script is:inline>
-
   function drag(e) {
-    const card = e.target
-    card.classList.add('dragging');
+    const card = e.target;
+    card.classList.add("dragging");
     e.dataTransfer.setData("book", card.id);
   }
   function endDrag(e) {
     const card = e.target;
-    card.classList.remove('dragging');
+    card.classList.remove("dragging");
   }
+</script>
+
+<script>
+  import { isOpen, bookDetails } from "@/store/bookDialog.store";
+import type { Book } from "@/types";
+
+  const cards = document.querySelectorAll(".openDialog") as NodeListOf<HTMLDivElement>;
+
+  // Set the store to true when the button is clicked
+  function openDialog(book: Book) {
+    bookDetails.set(book);
+    isOpen.set(true);
+  }
+
+  // Add an event listener to the button
+  cards.forEach((card) => {
+    const book = JSON.parse(card.getAttribute("data-book") ?? "{}") as Book;
+    card.addEventListener("click", (e) => openDialog(book));
+  });
 </script>
 
 <style>
   .dragging .details {
     opacity: 0;
+  }
+
+  .openDialog {
+    cursor: pointer;
   }
 </style>
