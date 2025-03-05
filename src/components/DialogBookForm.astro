@@ -10,6 +10,7 @@
   <div
     aria-hidden="true"
     class="fixed inset-0 w-full h-full bg-black/50 cursor-pointer"
+    id="overlay-dialog"
   >
   </div>
 
@@ -23,6 +24,7 @@
       <button
         type="button"
         class="absolute top-2 right-2 rtl:right-auto rtl:left-2"
+        id="close-btn"
       >
         <svg
           x-link-title="Close"
@@ -53,39 +55,38 @@
       <div class="space-y-2">
         <div aria-hidden="true" class="border-t border-gray-700 px-2"></div>
 
-        <form novalidate class="flex p-4 gap-4 items-center justify-center">
-          <label for="page" class=" text-gray-400 text-lg">
-            Página actual
-          </label>
-          <input
-            id="page"
-            class="border px-3 shadow-md border-gray-700 placeholder:text-base focus:outline-none ease-in-out duration-300 rounded-lg max-w-3xs"
-            type="number"
-            placeholder="0"
-            required
-          />
-        </form>
-
-        <div aria-hidden="true" class="border-b border-gray-700 px-2"></div>
-        <div class="px-6 py-2">
-          <div class="grid gap-2 grid-cols-[repeat(auto-fit,minmax(0,1fr))]">
-            <button
-              type="submit"
-              class="inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-gray-800 bg-white border-gray-300 hover:bg-gray-50 focus:ring-primary-600 focus:text-primary-600 focus:bg-primary-50 focus:border-primary-600 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-600 dark:hover:border-gray-500 dark:text-gray-200 dark:focus:text-primary-400 dark:focus:border-primary-400 dark:focus:bg-gray-800"
-            >
-              Actualizar
-            </button>
-
-            <button
-              type="button"
-              class="inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-white shadow focus:ring-white border-transparent bg-red-500 hover:bg-red-400"
-            >
-              <span class="flex items-center gap-1">
-                Eliminar
-              </span>
-            </button>
+        <form novalidate>
+          <div class="flex p-4 gap-4 items-center justify-center">
+            <label for="page" class="text-gray-400 text-lg">
+              Página actual
+            </label>
+            <input
+              id="page"
+              class="border px-3 shadow-md border-gray-700 placeholder:text-base focus:outline-none ease-in-out duration-300 rounded-lg max-w-3xs"
+              type="number"
+              placeholder="0"
+              required
+            />
           </div>
-        </div>
+          <div aria-hidden="true" class="border-b border-gray-700 px-2"></div>
+          <div class="px-6 py-2">
+            <div class="grid gap-2 grid-cols-[repeat(auto-fit,minmax(0,1fr))]">
+              <button
+                type="submit"
+                class="inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-gray-800 bg-white border-gray-300 hover:bg-gray-50 focus:ring-primary-600 focus:text-primary-600 focus:bg-primary-50 focus:border-primary-600 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-600 dark:hover:border-gray-500 dark:text-gray-200 dark:focus:text-primary-400 dark:focus:border-primary-400 dark:focus:bg-gray-800"
+              >
+                Actualizar
+              </button>
+
+              <button
+                type="button"
+                class="inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-white shadow focus:ring-white border-transparent bg-red-500 hover:bg-red-400"
+              >
+                <span class="flex items-center gap-1"> Eliminar </span>
+              </button>
+            </div>
+          </div>
+        </form>
       </div>
     </div>
   </div>
@@ -99,6 +100,11 @@
   const authors = document.querySelector("#authors") as HTMLParagraphElement;
   const genres = document.querySelector("#genres") as HTMLParagraphElement;
 
+  const closeBtn = document.querySelector("#close-btn") as HTMLButtonElement;
+  const overlay = document.querySelector("#overlay-dialog") as HTMLDivElement;
+
+  const input = document.querySelector("input") as HTMLInputElement;
+
   // Listen to changes in the store, and show/hide the dialog accordingly
   isOpen.subscribe((open) => {
     if (open) {
@@ -108,8 +114,52 @@
       title.textContent = book.title;
       authors.textContent = book.author_name.join(", ");
       genres.textContent = book.subject.join(", ");
+      input.value = `${book.page}`;
+      input.dataset.id = book.isbn.join(",");
     } else {
       dialog.style.display = "none";
     }
+  });
+
+  //close dialog
+  const closeModal = () => {
+    isOpen.set(false);
+  };
+
+  closeBtn.addEventListener("click", closeModal);
+  overlay.addEventListener("click", closeModal);
+</script>
+
+<script is:inline>
+  const form = document.querySelector("form") 
+  const input = document.querySelector("input") 
+  const removeBtn = document.querySelector("button:last-child")
+  const gridLectureList = document.querySelector(".grid-lecture-list");
+  const gridAvailable = document.querySelector(".grid-available");
+
+  const books = JSON.parse(localStorage.getItem("books")) || [];
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const bookId = input.dataset.id;
+    const booksUpdated = books.map((book) => {
+      if (book.isbn.join(",") === bookId) {
+        book.page = +input.value;
+      }
+      return book;
+    });
+    localStorage.setItem("books", JSON.stringify(booksUpdated));
+
+    // update the page number in the card
+    const card = document.getElementById(bookId);
+    card.dataset.book = JSON.stringify(booksUpdated);
+    window.location.reload();
+  });
+
+  removeBtn.addEventListener("click", () => {
+    const bookId = input.dataset.id;
+    const booksUpdated = books.filter((book) => book.isbn.join(",") !== bookId);
+    localStorage.setItem("books", JSON.stringify(booksUpdated));
+    window.location.reload();
   });
 </script>

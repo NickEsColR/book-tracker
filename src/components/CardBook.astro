@@ -74,19 +74,19 @@ const {
 
 <script>
   import { isOpen, bookDetails } from "@/store/bookDialog.store";
-import type { Book } from "@/types";
+import type { LectureBook } from "@/types";
 
   const cards = document.querySelectorAll(".openDialog") as NodeListOf<HTMLDivElement>;
 
   // Set the store to true when the button is clicked
-  function openDialog(book: Book) {
+  function openDialog(book: LectureBook) {
     bookDetails.set(book);
     isOpen.set(true);
   }
 
   // Add an event listener to the button
   cards.forEach((card) => {
-    const book = JSON.parse(card.getAttribute("data-book") ?? "{}") as Book;
+    const book = JSON.parse(card.getAttribute("data-book") ?? "{}") as LectureBook;
     card.addEventListener("click", (e) => openDialog(book));
   });
 </script>

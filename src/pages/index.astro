@@ -171,6 +171,8 @@ const availableBooks = filteredBooks.length;
     cardClone.removeAttribute("ondragstart");
     cardClone.removeAttribute("ondragend");
     cardClone.classList.add("openDialog");
+    cardClone.dataset.book = JSON.stringify(book);
+
     gridLectureList.appendChild(cardClone);
     card.parentNode.removeChild(card);
   });

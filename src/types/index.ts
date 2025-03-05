@@ -11,3 +11,7 @@ export interface Book {
   isbn:                   string[];
   author_name:            string[];
 }
+
+export interface LectureBook extends Book {
+  page: number;
+}
