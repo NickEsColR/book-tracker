@@ -94,7 +94,7 @@
 
 <script>
   import { bookISBN, isOpen } from "@/store/bookDialog.store";
-import { getBookByISBN } from "@/store/lectureList.store";
+  import { getBookByISBN } from "@/store/lectureList.store";
 
   const dialog = document.querySelector("#dialog") as HTMLDivElement;
   const title = document.querySelector("#book-title") as HTMLHeadingElement;
@@ -132,22 +132,33 @@ import { getBookByISBN } from "@/store/lectureList.store";
 </script>
 
 <script>
-import { bookISBN, isOpen } from "@/store/bookDialog.store";
-import { updateBook, books, removeBook, getBookByISBN } from "@/store/lectureList.store";
-
+  import { bookISBN, isOpen } from "@/store/bookDialog.store";
+  import {
+    updateBook,
+    removeBook,
+    getBookByISBN,
+  } from "@/store/lectureList.store";
 
   const form = document.querySelector("form") as HTMLFormElement;
   const input = document.querySelector("input") as HTMLInputElement;
-  const removeBtn = document.querySelector("button:last-child") as HTMLButtonElement;
-  const gridLectureList = document.querySelector(".grid-lecture-list") as HTMLDivElement;
-  const gridAvailable = document.querySelector(".grid-available") as HTMLDivElement;
-  
+  const removeBtn = document.querySelector(
+    "button:last-child"
+  ) as HTMLButtonElement;
+  const gridLectureList = document.querySelector(
+    ".grid-lecture-list"
+  ) as HTMLDivElement;
+  const gridAvailable = document.querySelector(
+    ".grid-available"
+  ) as HTMLDivElement;
+  const lectureListCount = document.querySelector("#number-lecture-list") as HTMLSpanElement;
+  const availableCount = document.querySelector("#number-available") as HTMLSpanElement;
+
   form.addEventListener("submit", (e) => {
     e.preventDefault();
     const book = getBookByISBN(bookISBN.get());
     if (!book) return;
     book.page = +input.value;
-    
+
     // update book in lecture list store and save it to local storage
     const updatedBooks = updateBook(book);
     localStorage.setItem("lectureList", JSON.stringify(updatedBooks));
@@ -157,11 +168,26 @@ import { updateBook, books, removeBook, getBookByISBN } from "@/store/lectureLis
   });
 
   removeBtn.addEventListener("click", () => {
-    const book = getBookByISBN(bookISBN.get());
+    const isbn = bookISBN.get();
+    const book = getBookByISBN(isbn);
     if (!book) return;
-    removeBook(book);
+    const books = removeBook(book);
 
-    const booksUpdated = books.get();
-    localStorage.setItem("books", JSON.stringify(booksUpdated));
+    localStorage.setItem("lectureList", JSON.stringify(books));
+
+    // close modal
+    isOpen.set(false);
+
+    // move card to the available list
+    moveCard(isbn);
   });
+
+  const moveCard = (isbn: string) => {
+    const card = document.getElementById(`${isbn}`) as HTMLDivElement;
+    card.classList.remove("openDialog");
+    gridAvailable.appendChild(card);
+    // update the count
+    lectureListCount.textContent = `${+(lectureListCount.textContent ?? 0) - 1}`;
+    availableCount.textContent = `${+(availableCount.textContent ?? 0) + 1}`;
+  };
 </script>

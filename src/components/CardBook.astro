@@ -23,7 +23,8 @@ const {
     "flex relative w-full aspect-[9/16]",
     { openDialog: canOpenDialog },
   ]}
-  id={isbn.join(",")}
+  id={`${isbn.join(", ")}`}
+  data-book={JSON.stringify(book)}
 >
   <img
     alt={title}
@@ -85,6 +86,9 @@ const {
     ".grid-lecture-list"
   ) as HTMLDivElement;
 
+  const lectureListCount = document.querySelector("#number-lecture-list") as HTMLSpanElement;
+  const availableCount = document.querySelector("#number-available") as HTMLSpanElement;
+
   // Enable button to add book to the lecture list
   addBtns.forEach((btn) =>
     btn.addEventListener("click", (e: Event) => {
@@ -108,14 +112,15 @@ const {
 
       // persist the list
       window.localStorage.setItem("lectureList", JSON.stringify(books.get()));
+
+      // update the count
+      lectureListCount.textContent = `${+(lectureListCount.textContent ?? 0) + 1}`;
+      availableCount.textContent = `${+(availableCount.textContent ?? 0) - 1}`;
     })
   );
 
-    // Enable card to open the dialog
-    cards.forEach((card) => {
-    const book = JSON.parse(
-      card.getAttribute("data-book") ?? "{}"
-    ) as LectureBook;
+  // Enable card to open the dialog
+  cards.forEach((card) => {
     card.addEventListener("click", (e) => openDialog(card.id));
   });
 </script>

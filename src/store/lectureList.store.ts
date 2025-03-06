@@ -10,7 +10,9 @@ export const addBook = (book: LectureBook) => {
 }
 
 export const removeBook = (book: LectureBook) => {
-  books.set(books.get().filter(b => b !== book));
+  const newBooks = books.get().filter(b => b !== book);
+  books.set(newBooks);
+  return newBooks;
 }
 
 export const updateBook = (book: LectureBook) => {
