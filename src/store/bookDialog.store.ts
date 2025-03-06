@@ -2,10 +2,10 @@ import type { Book, LectureBook } from "@/types";
 import { atom } from "nanostores";
 
 export const isOpen = atom(false);
-export const bookDetails = atom<LectureBook | null>(null);
+export const bookISBN = atom<string>("");
 
 // Function to open the dialog
-export const openDialog = (book: LectureBook) => {
-  bookDetails.set(book);
+export const openDialog = (isbn: string) => {
+  bookISBN.set(isbn);
   isOpen.set(true);
 };

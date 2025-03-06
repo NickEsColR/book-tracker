@@ -24,7 +24,6 @@ const {
     { openDialog: canOpenDialog },
   ]}
   id={isbn.join(",")}
-  data-book={JSON.stringify(book)}
 >
   <img
     alt={title}
@@ -57,25 +56,15 @@ const {
 </div>
 
 <script>
-  import type { LectureBook } from "@/types";
-  import { isOpen, bookDetails } from "@/store/bookDialog.store";
+  import { openDialog } from "@/store/bookDialog.store";
 
   const cards = document.querySelectorAll(
     ".openDialog"
   ) as NodeListOf<HTMLDivElement>;
 
-  // Set the store to true when the button is clicked
-  function openDialog(book: LectureBook) {
-    bookDetails.set(book);
-    isOpen.set(true);
-  }
-
   // Add an event listener to the button
   cards.forEach((card) => {
-    const book = JSON.parse(
-      card.getAttribute("data-book") ?? "{}"
-    ) as LectureBook;
-    card.addEventListener("click", (e) => openDialog(book));
+    card.addEventListener("click", (e) => openDialog(card.id));
   });
 </script>
 
@@ -115,7 +104,7 @@ const {
       lectureList.appendChild(card);
 
       // add function to open the dialog
-      card.addEventListener("click", (e) => openDialog(book));
+      card.addEventListener("click", (e) => openDialog(card.id));
 
       // persist the list
       window.localStorage.setItem("lectureList", JSON.stringify(books.get()));
@@ -127,7 +116,7 @@ const {
     const book = JSON.parse(
       card.getAttribute("data-book") ?? "{}"
     ) as LectureBook;
-    card.addEventListener("click", (e) => openDialog(book));
+    card.addEventListener("click", (e) => openDialog(card.id));
   });
 </script>
 
