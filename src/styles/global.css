@@ -11,3 +11,7 @@
 .details {
   @apply flex flex-col  justify-between gap-4 px-4 py-5 relative z-10 w-full border-4 border-gray-800 bg-gray-900 opacity-0 hover:opacity-90 transition-opacity duration-300;
 }
+
+.grid-lecture-list .details {
+  display: none;
+}

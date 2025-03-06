@@ -36,7 +36,7 @@ const availableBooks = filteredBooks.length;
 ---
 
 <Layout>
-  <DialogBookForm/>
+  <DialogBookForm />
   <div class="grid grid-cols-1 md:grid-cols-3 md:gap-4 container px-5 mx-auto">
     <section class="col-span-2">
       <GridBooks books={filteredBooks} className="grid-available">
@@ -143,13 +143,16 @@ const availableBooks = filteredBooks.length;
   });
 </script>
 
-<script is:inline define:vars={{minPageSelected, maxPageSelected, genreSelected}}>
+<script
+  is:inline
+  define:vars={{ minPageSelected, maxPageSelected, genreSelected }}
+>
   const lectureListCount = document.querySelector("#number-lecture-list");
   const availableCount = document.querySelector("#number-available");
   const gridLectureList = document.querySelector(".grid-lecture-list");
 
   // Get books in locals storage
-  const books = JSON.parse(localStorage.getItem("lectureList")) || [];
+  const books = JSON.parse(window.localStorage.getItem("lectureList") ?? "[]");
 
   // Filter books with query params
   const booksFiltered = books.filter(
@@ -160,20 +163,27 @@ const availableBooks = filteredBooks.length;
   );
 
   lectureListCount.textContent = booksFiltered.length;
-  availableCount.textContent = availableCount.textContent - booksFiltered.length;
+  availableCount.textContent =
+    availableCount.textContent - booksFiltered.length;
 
   // Move books from available to lecture list
   booksFiltered.forEach((book) => {
     const card = document.getElementById(book.isbn.join(","));
     const cardClone = card.cloneNode(true);
-    cardClone.removeChild(cardClone.querySelector("div"));
-    cardClone.removeAttribute("draggable");
-    cardClone.removeAttribute("ondragstart");
-    cardClone.removeAttribute("ondragend");
     cardClone.classList.add("openDialog");
     cardClone.dataset.book = JSON.stringify(book);
 
     gridLectureList.appendChild(cardClone);
     card.parentNode.removeChild(card);
   });
+</script>
+
+<script>
+  import { books } from "@/store/lectureList.store";
+  // Get books in locals storage
+  const booksStore = JSON.parse(
+    window.localStorage.getItem("lectureList") ?? "[]"
+  );
+
+  books.set(booksStore);
 </script>

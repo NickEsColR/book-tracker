@@ -57,8 +57,8 @@ const {
 </div>
 
 <script>
-  import { isOpen, bookDetails } from "@/store/bookDialog.store";
   import type { LectureBook } from "@/types";
+  import { isOpen, bookDetails } from "@/store/bookDialog.store";
 
   const cards = document.querySelectorAll(
     ".openDialog"
@@ -82,14 +82,24 @@ const {
 <script>
   import type { LectureBook } from "@/types";
   import { addBook, books } from "@/store/lectureList.store";
+  import { openDialog } from "@/store/bookDialog.store";
+
+  const cards = document.querySelectorAll(
+    ".openDialog"
+  ) as NodeListOf<HTMLDivElement>;
 
   const addBtns = document.querySelectorAll(
     ".details button"
   ) as NodeListOf<HTMLButtonElement>;
-  const lectureList = document.querySelector(".grid-lecture-list") as HTMLDivElement;
 
+  const lectureList = document.querySelector(
+    ".grid-lecture-list"
+  ) as HTMLDivElement;
+
+  // Enable button to add book to the lecture list
   addBtns.forEach((btn) =>
     btn.addEventListener("click", (e: Event) => {
+      e.stopPropagation();
       const card = btn.parentElement?.parentElement as HTMLDivElement;
       const book = JSON.parse(
         card.getAttribute("data-book") ?? "{}"
@@ -101,12 +111,24 @@ const {
 
       // move to the lecture list
       card.remove();
+      card.classList.add("openDialog");
       lectureList.appendChild(card);
+
+      // add function to open the dialog
+      card.addEventListener("click", (e) => openDialog(book));
 
       // persist the list
       window.localStorage.setItem("lectureList", JSON.stringify(books.get()));
     })
   );
+
+    // Enable card to open the dialog
+    cards.forEach((card) => {
+    const book = JSON.parse(
+      card.getAttribute("data-book") ?? "{}"
+    ) as LectureBook;
+    card.addEventListener("click", (e) => openDialog(book));
+  });
 </script>
 
 <style>
