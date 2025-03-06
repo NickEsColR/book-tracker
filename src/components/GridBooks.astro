@@ -5,11 +5,9 @@ import type { Book } from "@/types";
 interface Props {
   books: Book[];
   className?: string;
-  dropable?: boolean;
-  showDetails?: boolean;
 }
 
-const { books, className, dropable = false, showDetails = false } = Astro.props;
+const { books, className} = Astro.props;
 ---
 
 <div class=`grid gap-4 ${className}`>
@@ -19,59 +17,8 @@ const { books, className, dropable = false, showDetails = false } = Astro.props;
       (book) => (
         <CardBook
           book={book}
-          isDraggable={showDetails}
-          showDetails={showDetails}
         />
       )
     )
   }
-  {
-    dropable && (
-      <div
-        class="w-full aspect-[9/16] border-4 border-dashed border-gray-400 flex items-center justify-center text-pretty text-center"
-        ondrop="drop(event)"
-        ondragover="allowDrop(event)"
-      >
-        Agrega tus Libros aquí
-      </div>
-    )
-  }
 </div>
-
-<script is:inline>
-  function allowDrop(e) {
-    e.preventDefault();
-  }
-
-  function drop(e) {
-    e.preventDefault();
-    const data = e.dataTransfer.getData("book");
-    const card = document.getElementById(data);
-    // store the book to cookies storage
-    const book = card.getAttribute("data-book");
-    const bookObj = JSON.parse(book);
-    let books = JSON.parse(localStorage.getItem("books")) || [];
-    books.push(bookObj);
-    localStorage.setItem("books", JSON.stringify(books));
-    
-    // create a new card with the book data
-    const cardClone = card.cloneNode(true);
-    cardClone.removeChild(cardClone.querySelector("div"));
-    cardClone.removeAttribute("draggable");
-    cardClone.removeAttribute("ondragstart");
-    cardClone.removeAttribute("ondragend");
-    cardClone.classList.remove('dragging');
-    e.target.parentNode.appendChild(cardClone, e.target);
-    
-    // remove card from the grid
-    card.parentNode.removeChild(card);
-
-    // update the counter in the lecture list
-    const counter = document.getElementById("number-lecture-list");
-    counter.innerText = books.length;
-
-    // update the counter in the grid
-    const counterGrid = document.getElementById("number-available");
-    counterGrid.innerText = parseInt(counterGrid.innerText) - 1;
-  }
-</script>

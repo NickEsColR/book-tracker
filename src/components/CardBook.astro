@@ -2,11 +2,10 @@
 import type { Book } from "@/types";
 interface Props {
   book: Book;
-  isDraggable?: boolean;
-  showDetails?: boolean;
+  canOpenDialog?: boolean;
 }
 
-const { book, isDraggable = false, showDetails = false } = Astro.props;
+const { book, canOpenDialog } = Astro.props;
 
 const {
   author_name: authors,
@@ -22,61 +21,48 @@ const {
 <div
   class:list={[
     "flex relative w-full aspect-[9/16]",
-    {
-      openDialog: !showDetails,
-    },
+    { openDialog: canOpenDialog },
   ]}
   id={isbn.join(",")}
   data-book={JSON.stringify(book)}
-  {...isDraggable && {
-    draggable: true,
-    ondragstart: "drag(event)",
-    ondragend: "endDrag(event)",
-  }}
 >
   <img
     alt={title}
     class="absolute inset-0 w-full h-full object-fill object-center"
     src={image}
   />
-  {
-    showDetails && (
-      <div class="flex flex-col px-4 py-5 relative z-10 w-full border-4 border-gray-800 bg-gray-900 opacity-0 hover:opacity-100 details">
-        <h4 class="text-lg font-medium text-white mb-3">{title}</h4>
-        <span class="tracking-widest text-sm font-medium text-indigo-400 mb-1">
-          <strong>Autor{authors.length > 1 ? "es" : ""}:</strong>
-          {authors.join(", ")}
-        </span>
-        <span class="tracking-widest text-sm font-medium text-indigo-400 mb-1">
-          <strong>Genero{genres.length > 1 ? "s" : ""}:</strong>
-          {genres.join(", ")}
-        </span>
-        <span class="tracking-widest text-sm font-medium text-amber-200 mb-1">
-          Publicado en {year}
-        </span>
-        <p class="leading-relaxed">{pagesNumber} páginas</p>
-      </div>
-    )
-  }
+  <div class="details">
+    <h4 class="text-xl font-medium text-indigo-400 mb-3">{title}</h4>
+    <div>
+      <p class="tracking-widest text-xs text-white mb-1">
+        <strong>Autor{authors.length > 1 ? "es" : ""}:</strong>
+        {authors.join(", ")}
+      </p>
+      <p class="tracking-widest text-xs text-white mb-1">
+        <strong>Genero{genres.length > 1 ? "s" : ""}:</strong>
+        {genres.join(", ")}
+      </p>
+      <p class="tracking-widest text-xs text-white mb-1">
+        <strong>Año:</strong>
+        {year}
+      </p>
+      <p class="leading-relaxed">{pagesNumber} páginas</p>
+    </div>
+    <button
+      class="bg-amber-500 text-white px-3 py-2 rounded-md cursor-pointer hover:bg-amber-600"
+    >
+      Agregar a mi lista
+    </button>
+  </div>
 </div>
-
-<script is:inline>
-  function drag(e) {
-    const card = e.target;
-    card.classList.add("dragging");
-    e.dataTransfer.setData("book", card.id);
-  }
-  function endDrag(e) {
-    const card = e.target;
-    card.classList.remove("dragging");
-  }
-</script>
 
 <script>
   import { isOpen, bookDetails } from "@/store/bookDialog.store";
-import type { LectureBook } from "@/types";
+  import type { LectureBook } from "@/types";
 
-  const cards = document.querySelectorAll(".openDialog") as NodeListOf<HTMLDivElement>;
+  const cards = document.querySelectorAll(
+    ".openDialog"
+  ) as NodeListOf<HTMLDivElement>;
 
   // Set the store to true when the button is clicked
   function openDialog(book: LectureBook) {
@@ -86,16 +72,44 @@ import type { LectureBook } from "@/types";
 
   // Add an event listener to the button
   cards.forEach((card) => {
-    const book = JSON.parse(card.getAttribute("data-book") ?? "{}") as LectureBook;
+    const book = JSON.parse(
+      card.getAttribute("data-book") ?? "{}"
+    ) as LectureBook;
     card.addEventListener("click", (e) => openDialog(book));
   });
 </script>
 
-<style>
-  .dragging .details {
-    opacity: 0;
-  }
+<script>
+  import type { LectureBook } from "@/types";
+  import { addBook, books } from "@/store/lectureList.store";
 
+  const addBtns = document.querySelectorAll(
+    ".details button"
+  ) as NodeListOf<HTMLButtonElement>;
+  const lectureList = document.querySelector(".grid-lecture-list") as HTMLDivElement;
+
+  addBtns.forEach((btn) =>
+    btn.addEventListener("click", (e: Event) => {
+      const card = btn.parentElement?.parentElement as HTMLDivElement;
+      const book = JSON.parse(
+        card.getAttribute("data-book") ?? "{}"
+      ) as LectureBook;
+      book.page = 0;
+
+      // save to store
+      addBook(book);
+
+      // move to the lecture list
+      card.remove();
+      lectureList.appendChild(card);
+
+      // persist the list
+      window.localStorage.setItem("lectureList", JSON.stringify(books.get()));
+    })
+  );
+</script>
+
+<style>
   .openDialog {
     cursor: pointer;
   }

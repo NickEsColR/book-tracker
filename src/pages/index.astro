@@ -39,7 +39,7 @@ const availableBooks = filteredBooks.length;
   <DialogBookForm/>
   <div class="grid grid-cols-1 md:grid-cols-3 md:gap-4 container px-5 mx-auto">
     <section class="col-span-2">
-      <GridBooks books={filteredBooks} className="grid-available" showDetails>
+      <GridBooks books={filteredBooks} className="grid-available">
         <div
           class="flex flex-col text-center w-full mb-20 col-span-full"
           slot="header"
@@ -100,7 +100,7 @@ const availableBooks = filteredBooks.length;
       </GridBooks>
     </section>
     <section class="w-full">
-      <GridBooks books={[]} className="grid-lecture-list" dropable>
+      <GridBooks books={[]} className="grid-lecture-list">
         <h3
           class="sm:text-3xl text-2xl font-medium title-font mb-4 text-white col-span-full"
           slot="header"
@@ -149,7 +149,7 @@ const availableBooks = filteredBooks.length;
   const gridLectureList = document.querySelector(".grid-lecture-list");
 
   // Get books in locals storage
-  const books = JSON.parse(localStorage.getItem("books")) || [];
+  const books = JSON.parse(localStorage.getItem("lectureList")) || [];
 
   // Filter books with query params
   const booksFiltered = books.filter(
