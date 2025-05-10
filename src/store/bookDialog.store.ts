@@ -1,4 +1,4 @@
-import type { Book, LectureBook } from "@/types";
+import type { Book, LectureBook } from "@/types/OpenLibraryTypes";
 import { atom } from "nanostores";
 
 export const isOpen = atom(false);

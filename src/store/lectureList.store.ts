@@ -1,5 +1,5 @@
 import { atom } from 'nanostores';
-import type { LectureBook } from '@/types';
+import type { LectureBook } from '@/types/OpenLibraryTypes';
 
 export const books = atom<LectureBook[]>([]);
 

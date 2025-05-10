@@ -1,4 +1,9 @@
 export interface OpenLibraryResponse {
+  numFound: number;
+  start:    number;
+  numFoundExact: boolean;
+  q: string;
+  offset: number;
   docs: Book[];
 }
 

@@ -5,15 +5,13 @@ import DialogBookForm from "@/components/DialogBookForm.astro";
 import GridBooks from "@/components/GridBooks.astro";
 import Layout from "@/layouts/Layout.astro";
 
+import { getBooks } from "@/utils/booksApi";
+import { MAIN_SUBJECTS } from "@/consts/subjects";
+
 export const prerender = false;
 
-const { docs: books } = sample;
-const genres = Array.from(
-  books.reduce((acc, { subject }) => {
-    subject.forEach((genre) => acc.add(genre));
-    return acc;
-  }, new Set<string>())
-);
+const { docs: books } = await getBooks();
+const genres = MAIN_SUBJECTS
 const maxPage = Math.max(
   ...books.map(({ number_of_pages_median }) => number_of_pages_median)
 );
