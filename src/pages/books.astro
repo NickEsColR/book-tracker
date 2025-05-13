@@ -7,15 +7,33 @@ import { MAIN_SUBJECTS } from "@/consts/subjects";
 
 export const prerender = false;
 
+const LIMIT = 24; //24 * n
+
 const { request } = Astro;
 const { searchParams } = new URL(request.url);
 const titleQuery = searchParams.get("title");
 const genresQuery = searchParams.get("genre");
 const authorQuery = searchParams.get("author");
+const page = searchParams.get("page") || 1;
+const currentPage = parseInt(page as string, 10) || 1;
 
-const { docs: books,num_found } = await getBooks(titleQuery, authorQuery, genresQuery);
+const offset = (currentPage - 1) * LIMIT;
+
+const { docs: books,num_found } = await getBooks(titleQuery, authorQuery, genresQuery, offset, LIMIT);
+
+const ITEMS_PER_PAGE = books.length;
 const genres = MAIN_SUBJECTS;
+const totalPages = Math.ceil(num_found / ITEMS_PER_PAGE);
 
+const buildPageUrl = (pageNumber: number) => {
+  const newParams = new URLSearchParams(searchParams);
+  if (pageNumber <= 1) {
+    newParams.delete("page"); // Cleaner URL for page 1
+  } else {
+    newParams.set("page", pageNumber.toString());
+  }
+  return `${Astro.url.pathname}?${newParams.toString()}`;
+};
 ---
 
 <Layout>
@@ -78,6 +96,31 @@ const genres = MAIN_SUBJECTS;
           </form>
         </div>
       </GridBooks>
+
+      {/* Pagination Controls */}
+      {totalPages > 1 && (
+        <div class="flex justify-center items-center space-x-4 mt-8">
+          {currentPage > 1 && (
+            <a
+              href={buildPageUrl(currentPage - 1)}
+              class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded text-white no-underline"
+            >
+              Anterior
+            </a>
+          )}
+          <span class="text-white">
+            Página {currentPage} de {totalPages}
+          </span>
+          {currentPage < totalPages && (
+            <a
+              href={buildPageUrl(currentPage + 1)}
+              class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded text-white no-underline"
+            >
+              Siguiente
+            </a>
+          )}
+        </div>
+      )}
     </section>
   </div>
 </Layout>
@@ -104,6 +147,8 @@ const genres = MAIN_SUBJECTS;
     } else {
       url.searchParams.delete("genre");
     }
+    // Reset to page 1 when filters change
+    url.searchParams.delete("page");
     window.location.href = url.toString();
   }
 
