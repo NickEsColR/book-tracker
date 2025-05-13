@@ -10,7 +10,7 @@ interface Props {
 const { books, className} = Astro.props;
 ---
 
-<div class=`grid gap-4 ${className}`>
+<div class=`grid gap-4 grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 ${className}`>
   <slot name="header" />
   {
     books.map(
