@@ -1,6 +1,6 @@
 import type { OpenLibraryResponse } from "@/types/OpenLibraryTypes";
 
-const BASE_URL = "http://openlibrary.org/search.json?fields=title,author_name,first_publish_year,subject,cover_i,number_of_pages_median,isbn&title=";
+const BASE_URL = "http://openlibrary.org/search.json?fields=title,author_name,first_publish_year,subject,cover_i,number_of_pages_median&title=";
 
 export const getBooks = async (title: string = 'a'): Promise<OpenLibraryResponse> => {
   const url = `${BASE_URL}${title}&sort=rating`;

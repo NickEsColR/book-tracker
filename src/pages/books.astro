@@ -1,0 +1,71 @@
+---
+import GridBooks from "@/components/GridBooks.astro";
+import Layout from "@/layouts/Layout.astro";
+
+import { getBooks } from "@/utils/booksApi";
+import { MAIN_SUBJECTS } from "@/consts/subjects";
+
+export const prerender = false;
+
+const { request } = Astro;
+const { searchParams } = new URL(request.url);
+const genreSelected = searchParams.get("genre") || "all";
+
+const { docs: books,num_found } = await getBooks();
+const genres = MAIN_SUBJECTS;
+
+---
+
+<Layout>
+  <div class="container mx-auto py-8">
+    <section class="col-span-2">
+      <GridBooks books={books} className="grid-available">
+        <div
+          class="flex flex-col text-center w-full mb-10 col-span-full"
+          slot="header"
+        >
+          <h2
+            class="sm:text-3xl text-2xl font-medium title-font mb-4 text-white"
+          >
+            Filtrar Libros
+          </h2>
+          <span class="lg:w-2/3 mx-auto leading-relaxed text-base">
+            <span id="number-available" class="font-semibold"
+              >{num_found}</span
+            > Libros Encontrados
+          </span>
+
+          <form class="grid md:grid-cols-2 gap-4 mt-8 items-center">
+            <div class="flex flex-col xl:flex-row gap-2 items-center justify-center">
+              <label for="genre"> Filtrar por género </label>
+              <select
+                class="bg-gray-800 bg-opacity-40 rounded border border-gray-700 text-base outline-none text-white py-1 px-3"
+                name="genre"
+                id="genre"
+              >
+                <option value="all">Todos</option>
+                {
+                  genres.map(({id,es}) => (
+                    <option value={id} selected={id == genreSelected}>
+                      {es}
+                    </option>
+                  ))
+                }
+              </select>
+            </div>
+          </form>
+        </div>
+      </GridBooks>
+    </section>
+  </div>
+</Layout>
+
+<script>
+  const genreInput = document.querySelector("#genre") as HTMLSelectElement;
+
+  genreInput.addEventListener("change", () => {
+    const url = new URL(window.location.href);
+    url.searchParams.set("genre", genreInput.value);
+    window.location.href = url.toString();
+  });
+</script>
