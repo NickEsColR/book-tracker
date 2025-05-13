@@ -13,57 +13,39 @@ const displayTitle = book.title || "Título no disponible";
 const displayAuthors = (book.author_name && book.author_name.length > 0) 
   ? book.author_name 
   : ["Autor desconocido"];
-const displayGenres = (book.subject && book.subject.length > 0)
-  ? book.subject.slice(0, 3) // Show max 3 genres
-  : ["Género desconocido"];
-const displayYear = book.first_publish_year !== undefined ? book.first_publish_year : "Año desconocido";
-const displayPagesNumber = book.number_of_pages_median !== undefined 
-  ? book.number_of_pages_median 
-  : "N/A";
 
 const imageUrl = book.cover_i 
   ? `https://covers.openlibrary.org/b/id/${book.cover_i}-L.jpg`
-  : "https://placehold.co/270x480?text=No+Cover"; // Placeholder with 9/16 aspect ratio
-
-const cardElementId = book.cover_i 
-  ? `cover-${String(book.cover_i)}` // Prefix to ensure valid ID if cover_i is numeric
-  : `book-card-${(displayTitle.replace(/[^a-zA-Z0-9\s]/g, '').replace(/\s+/g, '-').toLowerCase() || Math.random().toString(36).substring(2, 9))}`;
+  : null; 
 ---
 
 <div
   class:list={[
-    "flex relative w-full aspect-[9/16]",
-    { openDialog: canOpenDialog },
+    "flex relative w-full aspect-[9/16] border border-gray-700 rounded overflow-hidden", // Added group for hover effects if needed later
+    { "openDialog": canOpenDialog },
   ]}
-  id={cardElementId}
-  data-book={JSON.stringify(book)}
 >
-  <img
-    alt={displayTitle}
-    class="absolute inset-0 w-full h-full object-fill object-center"
-    src={imageUrl}
-  />
-  <div class="details">
-    <h4 class="text-xl font-medium text-indigo-400 mb-3">{displayTitle}</h4>
-    <div>
-      <p class="tracking-widest text-xs text-white mb-1">
-        <strong>Autor(es):</strong>
-        {displayAuthors.join(", ")}
-      </p>
-      <p class="tracking-widest text-xs text-white mb-1">
-        <strong>Género(s):</strong>
-        {displayGenres.join(", ")}
-      </p>
-      <p class="tracking-widest text-xs text-white mb-1">
-        <strong>Año:</strong>
-        {displayYear}
-      </p>
-      <p class="leading-relaxed">{displayPagesNumber} páginas</p>
-    </div>
-    <button
-      class="bg-amber-500 text-white px-3 py-2 rounded-md cursor-pointer hover:bg-amber-600"
-    >
-      Agregar a mi lista
-    </button>
+  {/* Bookmark Icon */}
+  <div class="absolute top-0 right-0 z-10 -mt-1">
+    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-neutral-500 drop-shadow-md opacity-50 hover:opacity-100 transition-opacity duration-300 cursor-pointer">
+      <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"></path>
+    </svg>
   </div>
+
+  {imageUrl ? (
+    <img
+      alt={displayTitle}
+      class="absolute inset-0 w-full h-full object-fill object-center"
+      src={imageUrl}
+    />
+  ) : (
+    <div class="flex flex-col items-center justify-center h-full w-full p-4 text-center bg-gray-800 bg-opacity-40">
+      <h3 class="text-sm font-bold text-white leading-tight">{displayTitle}</h3>
+      <div class="mt-1 text-xs text-gray-300">
+        {displayAuthors.map((author) => (
+          <p>{author}</p>
+        ))}
+      </div>
+    </div>
+  )}
 </div>
