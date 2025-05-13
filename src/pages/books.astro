@@ -9,9 +9,11 @@ export const prerender = false;
 
 const { request } = Astro;
 const { searchParams } = new URL(request.url);
-const genreSelected = searchParams.get("genre") || "all";
+const titleQuery = searchParams.get("title");
+const genresQuery = searchParams.get("genre");
+const authorQuery = searchParams.get("author");
 
-const { docs: books,num_found } = await getBooks();
+const { docs: books,num_found } = await getBooks(titleQuery, authorQuery, genresQuery);
 const genres = MAIN_SUBJECTS;
 
 ---
@@ -35,18 +37,38 @@ const genres = MAIN_SUBJECTS;
             > Libros Encontrados
           </span>
 
-          <form class="grid md:grid-cols-2 gap-4 mt-8 items-center">
+          <form class="grid md:grid-cols-3 gap-4 mt-8 items-center">
+            <div class="flex flex-col xl:flex-row gap-2 items-center justify-center">
+              <label for="title">Filtrar por título</label>
+              <input
+                type="text"
+                id="title"
+                name="title"
+                value={titleQuery ?? ""}
+                class="bg-gray-800 bg-opacity-40 rounded border border-gray-700 text-base outline-none text-white py-1 px-3 w-full xl:flex-1"
+              />
+            </div>
+            <div class="flex flex-col xl:flex-row gap-2 items-center justify-center">
+              <label for="author">Filtrar por autor</label>
+              <input
+                type="text"
+                id="author"
+                name="author"
+                value={authorQuery ?? ""}
+                class="bg-gray-800 bg-opacity-40 rounded border border-gray-700 text-base outline-none text-white py-1 px-3 w-full xl:flex-1"
+              />
+            </div>
             <div class="flex flex-col xl:flex-row gap-2 items-center justify-center">
               <label for="genre"> Filtrar por género </label>
               <select
-                class="bg-gray-800 bg-opacity-40 rounded border border-gray-700 text-base outline-none text-white py-1 px-3"
+                class="bg-gray-800 bg-opacity-40 rounded border border-gray-700 text-base outline-none text-white py-1 px-3 w-full xl:flex-1"
                 name="genre"
                 id="genre"
               >
                 <option value="all">Todos</option>
                 {
                   genres.map(({id,es}) => (
-                    <option value={id} selected={id == genreSelected}>
+                    <option value={id} selected={id == genresQuery}>
                       {es}
                     </option>
                   ))
@@ -62,10 +84,38 @@ const genres = MAIN_SUBJECTS;
 
 <script>
   const genreInput = document.querySelector("#genre") as HTMLSelectElement;
+  const titleInput = document.querySelector("#title") as HTMLInputElement;
+  const authorInput = document.querySelector("#author") as HTMLInputElement;
 
-  genreInput.addEventListener("change", () => {
+  function updateUrlParams() {
     const url = new URL(window.location.href);
-    url.searchParams.set("genre", genreInput.value);
+    if (titleInput.value) {
+      url.searchParams.set("title", titleInput.value);
+    } else {
+      url.searchParams.delete("title");
+    }
+    if (authorInput.value) {
+      url.searchParams.set("author", authorInput.value);
+    } else {
+      url.searchParams.delete("author");
+    }
+    if (genreInput.value && genreInput.value !== "all") {
+      url.searchParams.set("genre", genreInput.value);
+    } else {
+      url.searchParams.delete("genre");
+    }
     window.location.href = url.toString();
+  }
+
+  genreInput.addEventListener("change", updateUrlParams);
+  titleInput.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") {
+      updateUrlParams();
+    }
+  });
+  authorInput.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") {
+      updateUrlParams();
+    }
   });
 </script>
