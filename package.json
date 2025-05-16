@@ -11,6 +11,7 @@
   "dependencies": {
     "@astrojs/netlify": "^6.3.2",
     "@clerk/astro": "^2.7.4",
+    "@clerk/themes": "^2.2.45",
     "@tailwindcss/vite": "^4.0.9",
     "astro": "^5.7.12",
     "nanostores": "^0.11.4",
