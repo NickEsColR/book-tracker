@@ -6,6 +6,7 @@ import tailwindcss from "@tailwindcss/vite";
 import netlify from "@astrojs/netlify";
 import clerk from "@clerk/astro";
 import { dark } from "@clerk/themes";
+import {esMX} from "@clerk/localizations";
 
 // https://astro.build/config
 export default defineConfig({
@@ -17,6 +18,7 @@ export default defineConfig({
       appearance: {
         baseTheme: dark,
       },
+      localization: esMX,
     }),
   ],
   adapter: netlify(),
