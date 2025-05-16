@@ -1,7 +1,15 @@
 ---
-
+import { SignedOut, SignInButton, SignedIn, UserButton } from "@clerk/astro/components";
 ---
 
-<header class="mt-6 w-full">
+<header class="mt-6 w-full flex justify-around items-center">
   <h1 class="text-center text-4xl font-extrabold">Book Tracker</h1>
+  <nav>
+    <SignedOut>
+      <SignInButton mode="modal" class="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer hover:opacity-80 focus:opacity-80 transition-opacity" />
+    </SignedOut>
+    <SignedIn>
+      <UserButton />
+    </SignedIn>
+  </nav>
 </header>
