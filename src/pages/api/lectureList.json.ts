@@ -11,6 +11,10 @@ export const POST: APIRoute = async ({ locals, request}) => {
   //TODO: Define the correct request body type
   console.log(id);
   const LectureBook = await request.json();
+  LectureBook["currentPage"] = 0;
+  LectureBook["liked"] = false;
+  LectureBook["mainNote"] = "";
+  LectureBook["readingStatus"] = "pending";
   console.log(LectureBook);
 
   return new Response(JSON.stringify({ LectureBook }), {
