@@ -1,6 +1,7 @@
 ---
 import GridBooks from "@/components/GridBooks.astro";
 import Layout from "@/layouts/Layout.astro";
+import Input from "@/components/ui/input.astro";
 
 import { getBooks } from "@/utils/booksApi";
 import { MAIN_SUBJECTS } from "@/consts/subjects";
@@ -56,34 +57,32 @@ const buildPageUrl = (pageNumber: number) => {
           </span>
 
           <form class="grid md:grid-cols-3 gap-4 mt-8 items-center">
-            <div class="flex flex-col xl:flex-row gap-2 items-center justify-center">
-              <label for="title">Filtrar por título</label>
-              <input
+              <Input
                 type="text"
                 id="title"
                 name="title"
+                label="Filtrar por título"
+                placeholder="Filtrar por título"
                 value={titleQuery ?? ""}
-                class="bg-gray-800 bg-opacity-40 rounded border border-gray-700 text-base outline-none text-white py-1 px-3 w-full xl:flex-1"
+                className="bg-gray-900"
               />
-            </div>
-            <div class="flex flex-col xl:flex-row gap-2 items-center justify-center">
-              <label for="author">Filtrar por autor</label>
-              <input
+              <Input
                 type="text"
                 id="author"
                 name="author"
+                label="Filtrar por autor"
+                placeholder="Filtrar por autor"
                 value={authorQuery ?? ""}
-                class="bg-gray-800 bg-opacity-40 rounded border border-gray-700 text-base outline-none text-white py-1 px-3 w-full xl:flex-1"
+                className="bg-gray-900"
               />
-            </div>
-            <div class="flex flex-col xl:flex-row gap-2 items-center justify-center">
-              <label for="genre"> Filtrar por género </label>
+            <div class="h-10">
+              <label for="genre" hidden>Filtrar por género</label>
               <select
-                class="bg-gray-800 bg-opacity-40 rounded border border-gray-700 text-base outline-none text-white py-1 px-3 w-full xl:flex-1"
+                class="bg-gray-900 bg-opacity-40 rounded-lg ring-2 ring-gray-500 text-base outline-none text-white py-1 px-3 w-full h-full xl:flex-1 focus:ring-blue-50 "
                 name="genre"
                 id="genre"
               >
-                <option value="all">Todos</option>
+                <option value="all">Filtrar por género</option>
                 {
                   genres.map(({id,es}) => (
                     <option value={id} selected={id == genresQuery}>
