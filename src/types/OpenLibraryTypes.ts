@@ -19,5 +19,8 @@ export interface Book {
 }
 
 export interface LectureBook extends Book {
-  page: number;
+  currentPage: number;
+  liked: boolean;
+  mainNote: string;
+  readingStatus: 'pending' | 'reading' | 'read';
 }
