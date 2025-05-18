@@ -1,10 +1,73 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import ListsLayout from "@/layouts/ListsLayout.astro";
+import GridBooks from "@/components/GridBooks.astro";
+import type { Book } from "@/types/OpenLibraryTypes";
+
+export const prerender = false;
+
+// Get list ID from query params
+const {searchParams} = Astro.url;
+const list_id = searchParams.get("list_id");
+
+let listInfo = null;
+let books: Book[] = [];
+let error = null;
+
+if (list_id) {
+  try {
+    // Fetch the lecture list data from API
+    const response = await fetch(`${import.meta.env.WEBSITE_URL}/api/lectureLists/${list_id}.json`);
+
+    if (!response.ok) {
+      if (response.status === 404) {
+        error = "Lista de lectura no encontrada";
+      } else {
+        error = "Error al cargar la lista de lectura";
+      }
+    } else {
+      const data = await response.json();
+      listInfo = data.listInfo;
+      books = data.books;
+    }
+  } catch (e) {
+    console.error("Error fetching lecture list:", e);
+    error = "Error al cargar la lista de lectura";
+  }
+}
 ---
 
 <Layout>
   <ListsLayout currentTab="public-lists">
+    {!list_id && (
+      <div class="text-center p-8 text-white">
+        <h2 class="text-2xl font-bold mb-4">Listas Públicas</h2>
+        <p>Selecciona una lista pública para ver sus libros</p>
+      </div>
+    )}
     
+    {list_id && error && (
+      <div class="text-center p-8 text-white">
+        <h2 class="text-xl font-bold mb-2 text-red-500">{error}</h2>
+        <p>Intenta con otra lista o regresa más tarde</p>
+      </div>
+    )}
+    
+    {list_id && listInfo && (
+      <div class="p-4">
+        <header class="mb-6">
+          <h1 class="text-2xl font-bold text-white">{listInfo.name}</h1>
+          {listInfo.description && (
+            <p class="text-gray-300 mt-2">{listInfo.description}</p>
+          )}
+        </header>
+        
+        {books.length === 0 ? (
+          <p class="text-center text-white p-8">Esta lista no contiene libros</p>
+        ) : (
+          <GridBooks books={books} className="mt-4" />
+        )}
+      </div>
+    )}
   </ListsLayout>
 </Layout>

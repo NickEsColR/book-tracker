@@ -10,28 +10,28 @@ export default async function seed() {
       openLibraryKey: 'OL24986186M', 
       title: 'Cien años de soledad', 
       author: 'Gabriel García Márquez', 
-      cover: 'https://covers.openlibrary.org/b/id/8231990-L.jpg' 
+      cover: '8231990' 
     },
     { 
       bookId: 'book-2', 
       openLibraryKey: 'OL7826058M', 
       title: '1984', 
       author: 'George Orwell', 
-      cover: 'https://covers.openlibrary.org/b/id/8575101-L.jpg' 
+      cover: '8575101' 
     },
     { 
       bookId: 'book-3', 
       openLibraryKey: 'OL27258W', 
       title: 'El Hobbit', 
       author: 'J.R.R. Tolkien', 
-      cover: 'https://covers.openlibrary.org/b/id/12003329-L.jpg' 
+      cover: '12003329' 
     },
     { 
       bookId: 'book-4', 
       openLibraryKey: 'OL39180W', 
       title: 'Steve Jobs', 
       author: 'Walter Isaacson', 
-      cover: 'https://covers.openlibrary.org/b/id/7327476-L.jpg' 
+      cover: '7327476' 
     }
   ]);
 
