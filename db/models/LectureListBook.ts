@@ -4,13 +4,7 @@ import { LectureLists } from "db/models/lectureLists";
 
 export const LectureListBooks = defineTable({
   columns: {
-    listId: column.text(),
-    lectureBookId: column.text(),
+    listId: column.text({references: () => LectureLists.columns.listId}),
+    lectureBookId: column.text({references: () => LectureBooks.columns.lectureBooksId}),
   },
-  foreignKeys: [
-    {
-      columns: ["listId", "lectureBookId"],
-      references: () => [LectureLists.columns.listId, LectureBooks.columns.lectureBooksId],
-    },
-  ],
 })
