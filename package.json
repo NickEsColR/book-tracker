@@ -9,6 +9,7 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/db": "^0.14.14",
     "@astrojs/netlify": "^6.3.2",
     "@clerk/astro": "^2.7.4",
     "@clerk/localizations": "^3.16.0",
