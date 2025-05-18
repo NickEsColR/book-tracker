@@ -1,14 +1,35 @@
 ---
 import SignInSignOutNav from "@/components/ui/SignInSignOutNav.astro";
+
+// Get current path to highlight the active link
+const { pathname } = Astro.url;
 ---
 
 <header class="mt-6 w-full flex justify-around items-center">
   <h1 class="text-center text-4xl font-extrabold">Book Tracker</h1>
   <nav>
     <ul class="flex gap-4">
-      <li><a href="/" class="text-blue-500 hover:underline">Inicio</a></li>
-      <li><a href="/books" class="text-blue-500 hover:underline">Explorar</a></li>
-      <li><a href="/lists" class="text-blue-500 hover:underline">Listas</a></li>
+      <li>
+        <a href="/" class={`px-3 py-2 rounded-md transition-opacity text-white ${pathname === "/" ? 
+          "font-bold" : 
+          "hover:opacity-80 focus:opacity-80"}`}>
+          Inicio
+        </a>
+      </li>
+      <li>
+        <a href="/books" class={`px-3 py-2 rounded-md transition-opacity text-white ${pathname === "/books" ? 
+          "font-bold" : 
+          "hover:opacity-80 focus:opacity-80"}`}>
+          Explorar
+        </a>
+      </li>
+      <li>
+        <a href="/lists" class={`px-3 py-2 rounded-md transition-opacity text-white ${pathname === "/lists" ? 
+          "font-bold" : 
+          "hover:opacity-80 focus:opacity-80"}`}>
+          Listas
+        </a>
+      </li>
     </ul>
   </nav>
   <SignInSignOutNav />
