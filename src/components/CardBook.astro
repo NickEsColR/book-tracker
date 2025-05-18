@@ -98,6 +98,11 @@ const imageUrl = book.cover_i
       })
         .then((response) => {
           if (!response.ok) {
+            if (response.status === 401) {
+              // TODO: enhanced sugestion to improve user experience
+              alert("Por favor, inicia sesión para guardar libros en tu lista de lectura.");
+              throw new Error("Usuario no autenticado");
+            }
             throw new Error("Error al guardar el libro");
           }
           return response.json();
