@@ -3,6 +3,9 @@ import SignInSignOutNav from "@/components/ui/SignInSignOutNav.astro";
 
 // Get current path to highlight the active link
 const { pathname } = Astro.url;
+const isHome = pathname === "/";
+const isBooks = pathname === "/books";
+const isLectureLsits = pathname.startsWith("/lecture-lists");
 ---
 
 <header class="mt-6 w-full flex justify-around items-center">
@@ -10,23 +13,32 @@ const { pathname } = Astro.url;
   <nav>
     <ul class="flex gap-4">
       <li>
-        <a href="/" class={`px-3 py-2 rounded-md transition-opacity text-white ${pathname === "/" ? 
-          "font-bold" : 
-          "hover:opacity-80 focus:opacity-80"}`}>
+        <a href="/" class:list={["px-3 py-2 rounded-md transition-opacity text-white",
+          {
+            "font-bold": isHome,
+            "hover:opacity-80 focus:opacity-80": !isHome,
+          }
+        ]}>
           Inicio
         </a>
       </li>
       <li>
-        <a href="/books" class={`px-3 py-2 rounded-md transition-opacity text-white ${pathname === "/books" ? 
-          "font-bold" : 
-          "hover:opacity-80 focus:opacity-80"}`}>
+        <a href="/books" class:list={["px-3 py-2 rounded-md transition-opacity text-white",
+          {
+            "font-bold": isBooks,
+            "hover:opacity-80 focus:opacity-80": !isBooks,
+          }
+        ]}>
           Explorar
         </a>
       </li>
       <li>
-        <a href="/lists" class={`px-3 py-2 rounded-md transition-opacity text-white ${pathname === "/lists" ? 
-          "font-bold" : 
-          "hover:opacity-80 focus:opacity-80"}`}>
+        <a href="/lecture-lists/my-lists" class:list={["px-3 py-2 rounded-md transition-opacity text-white",
+          {
+            "font-bold": isLectureLsits,
+            "hover:opacity-80 focus:opacity-80": !isLectureLsits,
+          }
+        ]}>
           Listas
         </a>
       </li>
