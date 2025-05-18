@@ -1,0 +1,39 @@
+---
+interface Props {
+  currentTab: "my-lists" | "public-lists";
+}
+const { currentTab } = Astro.props;
+const isMyLists = currentTab === "my-lists";
+const isPublicLists = currentTab === "public-lists";
+---
+
+<div class="text-sm text-center text-white">
+  <ul class="flex flex-wrap gap-2">
+    <li>
+      <a
+        href="./my-lists"
+        class:list={[
+          "inline-block p-4 border-gray-300 hover:opacity-80 focus:opacity-80 transition-opacity duration-300 ease-in-out",
+          {
+            "border-b-2 font-bold": isMyLists,
+          }
+        ]}
+      >
+        Mis listas
+      </a>
+    </li>
+    <li>
+      <a
+        href="./public-lists"
+        class:list={[
+          "inline-block p-4 border-gray-300 hover:opacity-80 focus:opacity-80 transition-opacity duration-300 ease-in-out",
+          {
+            "border-b-2 font-bold": isPublicLists,
+          }
+        ]}
+      >
+        listas públicas
+      </a>
+    </li>
+  </ul>
+</div>
