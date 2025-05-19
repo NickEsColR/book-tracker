@@ -1,9 +1,6 @@
 import type { APIRoute } from "astro";
 import { db, eq, LectureLists, LectureListBooks } from "astro:db";
-import type { Book } from "@/types/OpenLibraryTypes";
 import { fetchLectureListBooks } from "@/utils/lectureListUtils";
-
-export const prerender = false;
 
 export const GET: APIRoute = async ({ params }) => {
   try {

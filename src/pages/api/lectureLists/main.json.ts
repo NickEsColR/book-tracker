@@ -4,8 +4,6 @@ import type { APIRoute } from "astro";
 import { db, LectureLists, eq, and, LectureListBooks, Books, LectureBooks } from "astro:db";
 import { randomUUID } from "crypto";
 
-export const prerender = false;
-
 const TYPE = "main";
 
 export const GET: APIRoute = async ({ locals }) => {

@@ -6,8 +6,6 @@ import Input from "@/components/ui/input.astro";
 import { getBooks } from "@/utils/booksApi";
 import { MAIN_SUBJECTS } from "@/consts/subjects";
 
-export const prerender = false;
-
 const LIMIT = 24; //24 * n
 
 const { request } = Astro;

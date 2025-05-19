@@ -4,8 +4,6 @@ import ListsLayout from "@/layouts/ListsLayout.astro";
 import GridBooks from "@/components/GridBooks.astro";
 import type { Book } from "@/types/OpenLibraryTypes";
 
-export const prerender = false;
-
 // Get list ID from query params
 const {searchParams} = Astro.url;
 const list_id = searchParams.get("list_id");

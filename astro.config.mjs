@@ -22,4 +22,5 @@ export default defineConfig({
     localization: esMX,
   }), db()],
   adapter: netlify(),
+  output: 'server',
 });

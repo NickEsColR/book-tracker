@@ -1,0 +1,70 @@
+---
+import { db, eq, LectureLists } from "astro:db";
+import type { LectureLists as LectureListInterface } from "@/types/db.types";
+
+
+const {userId} = await Astro.locals.auth();
+
+
+let lectureLists: LectureListInterface[] = [];
+let error = null;
+
+if (userId) {
+  try {
+    lectureLists = await db
+      .select()
+      .from(LectureLists)
+      .where(eq(LectureLists.userId, userId)) as LectureListInterface[];
+    
+    console.log("Lecture lists data:", { lectureLists });
+  } catch (error) {
+    console.error("Error fetching lecture lists:", error);
+    error = "Error fetching lecture lists";
+  }
+}
+---
+
+{
+  // if no user, show a message to login
+  !userId && (
+    <div class="text-center p-8 bg-gray-800 rounded-lg mx-auto my-8 max-w-md">
+          <h2 class="text-xl font-bold text-white mb-4">
+            Necesitas iniciar sesión
+          </h2>
+          <p class="text-gray-300 mb-6">
+            Para ver tus listas de lectura, primero debes iniciar sesión en tu
+            cuenta.
+          </p>
+          <a
+            href="/login"
+            class="inline-block px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors"
+          >
+            Iniciar sesión
+          </a>
+        </div>
+  )
+}
+
+{error && (
+  <div class="text-center p-8 bg-red-800 rounded-lg mx-auto my-8 max-w-md">
+    <h2 class="text-xl font-bold text-white mb-4">Error</h2>
+    <p class="text-gray-300 mb-6">{error}</p>
+  </div>
+)}
+
+{lectureLists.length > 0 && (
+  <div class="flex flex-col gap-4">
+    {lectureLists.map((list) => (
+      <div class="bg-gray-800 p-4 rounded-lg">
+        <h3 class="text-lg font-bold text-white">{list.name}</h3>
+        <p class="text-gray-300">{list.description}</p>
+        <a
+          href={`/lecture-lists/my-lists/${list.listId}`}
+          class="inline-block mt-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors"
+        >
+          Ver lista
+        </a>
+      </div>
+    ))}
+  </div>
+)}

@@ -10,14 +10,14 @@ export default async function seed() {
       openLibraryKey: '/works/OL17203233W', 
       title: 'To All the Boys I\'ve Loved Before', 
       author: 'Jenny Han', 
-      cover: '7370711.0' 
+      cover: '7370711' 
     },
     { 
       bookId: 'book-2', 
       openLibraryKey: '/works/OL16821606W', 
       title: 'All the Light We Cannot See', 
       author: 'Anthony Doerr', 
-      cover: '14559680.0' 
+      cover: '14559680' 
     },
     { 
       bookId: 'book-3', 
@@ -31,7 +31,7 @@ export default async function seed() {
       openLibraryKey: '/works/OL17914663W', 
       title: 'Steve Jobs', 
       author: 'Martha Wells', 
-      cover: '9157148.0' 
+      cover: '9157148' 
     }
   ]);
 
