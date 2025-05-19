@@ -7,31 +7,31 @@ export default async function seed() {
   await db.insert(Books).values([
     { 
       bookId: 'book-1', 
-      openLibraryKey: 'OL24986186M', 
-      title: 'Cien años de soledad', 
-      author: 'Gabriel García Márquez', 
-      cover: '8231990' 
+      openLibraryKey: '/works/OL17203233W', 
+      title: 'To All the Boys I\'ve Loved Before', 
+      author: 'Jenny Han', 
+      cover: '7370711.0' 
     },
     { 
       bookId: 'book-2', 
-      openLibraryKey: 'OL7826058M', 
-      title: '1984', 
-      author: 'George Orwell', 
-      cover: '8575101' 
+      openLibraryKey: '/works/OL16821606W', 
+      title: 'All the Light We Cannot See', 
+      author: 'Anthony Doerr', 
+      cover: '14559680.0' 
     },
     { 
       bookId: 'book-3', 
-      openLibraryKey: 'OL27258W', 
+      openLibraryKey: '/works/OL27258W', 
       title: 'El Hobbit', 
       author: 'J.R.R. Tolkien', 
       cover: '12003329' 
     },
     { 
       bookId: 'book-4', 
-      openLibraryKey: 'OL39180W', 
+      openLibraryKey: '/works/OL17914663W', 
       title: 'Steve Jobs', 
-      author: 'Walter Isaacson', 
-      cover: '7327476' 
+      author: 'Martha Wells', 
+      cover: '9157148.0' 
     }
   ]);
 
@@ -90,16 +90,16 @@ export default async function seed() {
   // Crear listas de lectura para el usuario "123"
   await db.insert(LectureLists).values([
     { 
-      listId: 'list-main', 
-      userId: '123', 
-      name: 'Mi Lista Principal', 
+      listId: 'f4b1a98a-7374-47c1-9056-68e708c840ef', 
+      userId: 'user_2xC2IEI2zxJDbODtqkkk2ybWYDM', 
+      name: 'Main', 
       description: 'Libros que estoy leyendo o quiero leer pronto', 
       type: 'main' 
     },
     { 
-      listId: 'list-liked', 
-      userId: '123', 
-      name: 'Mis Favoritos', 
+      listId: 'f4b1a98a-7374-47c1-9056-68e708c840eg', 
+      userId: 'user_2xC2IEI2zxJDbODtqkkk2ybWYDM', 
+      name: 'Liked', 
       description: 'Libros que me han encantado', 
       type: 'liked' 
     }
