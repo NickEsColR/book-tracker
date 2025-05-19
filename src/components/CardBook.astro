@@ -89,7 +89,7 @@ const imageUrl = book.cover_i
     btn.addEventListener("click", (e) => {
       e.stopPropagation();
       const bookData = JSON.parse((e.currentTarget as HTMLButtonElement).dataset.book || "{}");
-      fetch("/api/lectureList.json", {
+      fetch("/api/lectureLists/main.json", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -103,6 +103,7 @@ const imageUrl = book.cover_i
               alert("Por favor, inicia sesión para guardar libros en tu lista de lectura.");
               throw new Error("Usuario no autenticado");
             }
+            alert("Error al guardar el libro. Por favor, inténtalo de nuevo.");
             throw new Error("Error al guardar el libro");
           }
           return response.json();

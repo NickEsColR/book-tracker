@@ -1,6 +1,7 @@
 import type { APIRoute } from "astro";
-import { db, eq, LectureLists, LectureListBooks, Books, LectureBooks } from "astro:db";
+import { db, eq, LectureLists, LectureListBooks } from "astro:db";
 import type { Book } from "@/types/OpenLibraryTypes";
+import { fetchLectureListBooks } from "@/utils/lectureListUtils";
 
 export const prerender = false;
 
@@ -52,29 +53,7 @@ export const GET: APIRoute = async ({ params }) => {
     const lectureBookIds = lectureListBooks.map(item => item.lectureBookId);
     
     // Get all LectureBooks with their associated Books
-    // TODO: validate if its posible to optimize this query to fetch all books in one go at same time query ListDetails
-    const books: Book[] = [];
-    
-    for (const lectureBookId of lectureBookIds) {
-      const lectureBook = await db.select().from(LectureBooks).where(eq(LectureBooks.lectureBooksId, lectureBookId));
-      
-      if (lectureBook && lectureBook.length > 0) {
-        const book = await db.select().from(Books).where(eq(Books.bookId, lectureBook[0].bookId));
-        
-        if (book && book.length > 0) {
-          // Convert to Book format for CardBook component
-          const bookData: Book = {
-            key: book[0].openLibraryKey,
-            title: book[0].title,
-            author_name: [book[0].author],
-            cover_i: book[0].cover,
-            isbn: []
-          };
-          
-          books.push(bookData);
-        }
-      }
-    }
+    const books = await fetchLectureListBooks(lectureBookIds);
     
     return new Response(
       JSON.stringify({ 
