@@ -20,6 +20,7 @@ if (!userId) {
 let list: LectureListInterface | null = null;
 let books: LectureBook[] = [];
 let error: string | null = null;
+let isLikedList = false;
 
 try {
   // Get the lecture list
@@ -52,6 +53,9 @@ try {
 
     // Fetch books with their lecture book IDs, reading status, and notes
     books = await fetchLectureListBooksWithDetails(lectureBookIds);
+
+    // Check if the list is liked
+    isLikedList = lectureList[0].type === "liked";
   }
 } catch (err) {
   console.error("Error fetching lecture list:", err);
@@ -117,7 +121,7 @@ try {
                 Libros en esta lista (
                 <span class="book-count">{books.length}</span>)
               </h2>
-              <GridBooks books={books} className="mt-4" listId={listId} />
+              <GridBooks books={books} className="mt-4" listId={listId} isLikedList={isLikedList}/>
             </div>
           )}
         </div>

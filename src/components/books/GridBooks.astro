@@ -6,9 +6,10 @@ interface Props {
   books: Book[];
   className?: string;
   listId?: string;
+  isLikedList?: boolean;
 }
 
-const { books, className, listId } = Astro.props;
+const { books, className, listId, isLikedList } = Astro.props;
 ---
 
 <div class=`grid gap-4 grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 ${className}`>
@@ -19,6 +20,7 @@ const { books, className, listId } = Astro.props;
         <CardBook
           book={book}
           listId={listId}
+          isLikedList={isLikedList} 
         />
       )
     )

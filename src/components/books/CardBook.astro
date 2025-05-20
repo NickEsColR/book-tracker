@@ -6,9 +6,10 @@ interface Props {
   book: Book | LectureBook;
   canOpenDialog?: boolean;
   listId?: string;
+  isLikedList?: boolean;
 }
 
-const { book, canOpenDialog, listId } = Astro.props;
+const { book, canOpenDialog, listId, isLikedList } = Astro.props;
 
 // Validations and default values
 const displayTitle = book.title || "Título no disponible";
@@ -64,7 +65,11 @@ const isLectureBook = 'lectureBookId' in book;
     </h3>
     <p class="text-xs text-gray-300 truncate">{displayAuthors.join(", ")}</p>
   </div>
-  <Bookmark book={book} listId={listId} />
+  {
+    !isLikedList && (  
+      <Bookmark book={book} listId={listId} />
+    )
+  }
 </div>
 
 <script>
