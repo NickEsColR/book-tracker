@@ -42,21 +42,25 @@
         <span class="sr-only"> Close </span>
       </button>
 
-      <div class="space-y-2 p-2">
-        <div class="p-2 space-y-2 text-center dark:text-white">
-          <h2 class="text-xl font-bold tracking-tight" id="book-title">
-            Book Title
-          </h2>
-          <p class="text-indigo-500" id="authors">Authors</p>
-          <p class="text-yellow-500" id="genres">genres</p>
+      <div class="space-y-2 p-2" id="book-details">
+        <div class="flex flex-col md:flex-row p-2 gap-4 items-center dark:text-white">
+          <div class="flex-shrink-0">
+            <img id="book-cover" src="" alt="Book cover" class="w-32 h-auto object-cover rounded shadow-md" />
+          </div>
+          <div class="space-y-2 text-center md:text-left flex-1">
+            <h2 class="text-xl font-bold tracking-tight" id="book-title">
+              Book Title
+            </h2>
+            <p class="text-indigo-500" id="authors">Authors</p>
+          </div>
         </div>
       </div>
 
-      <div class="space-y-2">
+      <div class="space-y-2" id="lecture-book-details">
         <div aria-hidden="true" class="border-t border-gray-700 px-2"></div>
 
-        <form novalidate>
-          <div class="flex p-4 gap-4 items-center justify-center">
+        <form novalidate class="space-y-4 p-4">
+          <div class="flex gap-4 items-center justify-between">
             <label for="page" class="text-gray-400 text-lg">
               Página actual
             </label>
@@ -68,23 +72,60 @@
               required
             />
           </div>
-          <div aria-hidden="true" class="border-b border-gray-700 px-2"></div>
-          <div class="px-6 py-2">
-            <div class="grid gap-2 grid-cols-[repeat(auto-fit,minmax(0,1fr))]">
-              <button
-                type="submit"
-                class="inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-gray-800 bg-white border-gray-300 hover:bg-gray-50 focus:ring-primary-600 focus:text-primary-600 focus:bg-primary-50 focus:border-primary-600 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-600 dark:hover:border-gray-500 dark:text-gray-200 dark:focus:text-primary-400 dark:focus:border-primary-400 dark:focus:bg-gray-800"
-              >
-                Actualizar
-              </button>
+          
+          <div class="flex gap-4 items-center justify-between">
+            <label for="reading-status" class="text-gray-400 text-lg">
+              Estado de lectura
+            </label>
+            <select 
+              id="reading-status" 
+              class="border px-3 py-2 shadow-md border-gray-700 focus:outline-none ease-in-out duration-300 rounded-lg"
+            >
+              <option value="pending">Pendiente</option>
+              <option value="reading">Leyendo</option>
+              <option value="completed">Leído</option>
+            </select>
+          </div>
+          
+          <div class="flex gap-4 items-center justify-between">
+            <label for="liked" class="text-gray-400 text-lg">
+              Me gusta
+            </label>
+            <input
+              id="liked"
+              type="checkbox"
+              class="w-5 h-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+            />
+          </div>
+          
+          <div class="space-y-2">
+            <label for="main-note" class="block text-gray-400 text-lg">
+              Nota principal
+            </label>
+            <textarea
+              id="main-note"
+              rows="3"
+              class="w-full border px-3 py-2 shadow-md border-gray-700 placeholder:text-base focus:outline-none ease-in-out duration-300 rounded-lg"
+              placeholder="Escribe una nota sobre este libro..."
+            ></textarea>
+          </div>
+          
+          <div aria-hidden="true" class="border-b border-gray-700"></div>
+          
+          <div class="grid gap-2 grid-cols-[repeat(auto-fit,minmax(0,1fr))]">
+            <button
+              type="submit"
+              class="inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-gray-800 bg-white border-gray-300 hover:bg-gray-50 focus:ring-primary-600 focus:text-primary-600 focus:bg-primary-50 focus:border-primary-600 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-600 dark:hover:border-gray-500 dark:text-gray-200 dark:focus:text-primary-400 dark:focus:border-primary-400 dark:focus:bg-gray-800"
+            >
+              Actualizar
+            </button>
 
-              <button
-                type="button"
-                class="inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-white shadow focus:ring-white border-transparent bg-red-500 hover:bg-red-400"
-              >
-                <span class="flex items-center gap-1"> Eliminar </span>
-              </button>
-            </div>
+            <button
+              type="button"
+              class="inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-white shadow focus:ring-white border-transparent bg-red-500 hover:bg-red-400"
+            >
+              <span class="flex items-center gap-1"> Eliminar </span>
+            </button>
           </div>
         </form>
       </div>
@@ -92,31 +133,49 @@
   </div>
 </div>
 
+<!-- handle open and close dialog -->
 <script>
-  import { bookISBN, isOpen } from "@/store/bookDialog.store";
-  import { getBookByISBN } from "@/store/lectureList.store";
+  import { bookData, isOpen } from "@/store/bookDialog.store";
 
   const dialog = document.querySelector("#dialog") as HTMLDivElement;
   const title = document.querySelector("#book-title") as HTMLHeadingElement;
   const authors = document.querySelector("#authors") as HTMLParagraphElement;
-  const genres = document.querySelector("#genres") as HTMLParagraphElement;
+  const coverImg = document.querySelector("#book-cover") as HTMLImageElement;
 
   const closeBtn = document.querySelector("#close-btn") as HTMLButtonElement;
   const overlay = document.querySelector("#overlay-dialog") as HTMLDivElement;
 
-  const input = document.querySelector("input") as HTMLInputElement;
+  const inputPage = document.querySelector("#page") as HTMLInputElement;
+  const selectStatus = document.querySelector("#reading-status") as HTMLSelectElement;
+  const checkboxLiked = document.querySelector("#liked") as HTMLInputElement;
+  const textareaNote = document.querySelector("#main-note") as HTMLTextAreaElement;
 
   // Listen to changes in the store, and show/hide the dialog accordingly
   isOpen.subscribe((open) => {
     if (open) {
       dialog.style.display = "block";
-      const book = getBookByISBN(bookISBN.get());
+      const book = bookData.get();
       if (!book) return;
-      title.textContent = book.title;
-      authors.textContent = book.author_name.join(", ");
-      genres.textContent = book.subject.join(", ");
-      input.value = `${book.page}`;
-      input.dataset.id = book.isbn.join(",");
+      
+      // Update book details
+      title.textContent = book.title || 'Unknown Title';
+      authors.textContent = book.author_name?.join(", ") || 'Unknown Author';
+      
+      // Set cover image
+      if (book.cover_i) {
+        coverImg.src = `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`;
+        coverImg.alt = `Cover for ${book.title}`;
+      } else {
+        coverImg.src = "/placeholder-book-cover.jpg";
+        coverImg.alt = `Cover for ${book.title}`;
+      }
+      
+      // Set form values
+      inputPage.value = `${book.currentPage || 0}`;
+      selectStatus.value = book.readingStatus || 'pending';
+      checkboxLiked.checked = book.liked || false;
+      textareaNote.value = book.mainNote || '';
+      
     } else {
       dialog.style.display = "none";
     }
@@ -131,8 +190,9 @@
   overlay.addEventListener("click", closeModal);
 </script>
 
+<!-- handle form submission to update lecture details -->
 <script>
-  import { bookISBN, isOpen } from "@/store/bookDialog.store";
+  import { bookData, isOpen } from "@/store/bookDialog.store";
   import {
     updateBook,
     removeBook,
@@ -140,7 +200,10 @@
   } from "@/store/lectureList.store";
 
   const form = document.querySelector("form") as HTMLFormElement;
-  const input = document.querySelector("input") as HTMLInputElement;
+  const inputPage = document.querySelector("#page") as HTMLInputElement;
+  const selectStatus = document.querySelector("#reading-status") as HTMLSelectElement;
+  const checkboxLiked = document.querySelector("#liked") as HTMLInputElement;
+  const textareaNote = document.querySelector("#main-note") as HTMLTextAreaElement;
   const removeBtn = document.querySelector(
     "button:last-child"
   ) as HTMLButtonElement;
@@ -155,9 +218,14 @@
 
   form.addEventListener("submit", (e) => {
     e.preventDefault();
-    const book = getBookByISBN(bookISBN.get());
+    const book = bookData.get();
     if (!book) return;
-    book.page = +input.value;
+    
+    // Update book with form values
+    book.currentPage = +inputPage.value;
+    book.readingStatus = selectStatus.value as 'pending' | 'reading' | 'completed';
+    book.liked = checkboxLiked.checked;
+    book.mainNote = textareaNote.value;
 
     // update book in lecture list store and save it to local storage
     const updatedBooks = updateBook(book);
@@ -168,9 +236,9 @@
   });
 
   removeBtn.addEventListener("click", () => {
-    const isbn = bookISBN.get();
-    const book = getBookByISBN(isbn);
-    if (!book) return;
+    const book = bookData.get();
+    if (!book || !book.isbn) return;
+    const isbn = book.isbn[0];
     const books = removeBook(book);
 
     localStorage.setItem("lectureList", JSON.stringify(books));

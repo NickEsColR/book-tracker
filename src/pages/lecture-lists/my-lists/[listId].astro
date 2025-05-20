@@ -2,15 +2,11 @@
 import Layout from "@/layouts/Layout.astro";
 import ListsLayout from "@/layouts/ListsLayout.astro";
 import GridBooks from "@/components/GridBooks.astro";
-import {
-  db,
-  eq,
-  LectureLists,
-  LectureListBooks,
-} from "astro:db";
+import { db, eq, LectureLists, LectureListBooks } from "astro:db";
 import { fetchLectureListBooksWithDetails } from "@/utils/lectureListUtils";
 import type { LectureBook } from "@/types/OpenLibraryTypes";
 import type { LectureLists as LectureListInterface } from "@/types/db.types";
+import DialogBookForm from "@/components/DialogBookForm.astro";
 
 // Get the current user's ID from auth
 const { userId } = await Astro.locals.auth();
@@ -63,9 +59,7 @@ try {
 }
 ---
 
-<Layout
-  title={list ? `${list.name} | Mi Lista de Lectura` : "Lista de Lectura"}
->
+<Layout>
   <ListsLayout currentTab="my-lists">
     {
       error && (
@@ -84,6 +78,7 @@ try {
 
     {
       list && (
+        <DialogBookForm />
         <div class="mb-8">
           <div class="flex items-center justify-between mb-6">
             <div>

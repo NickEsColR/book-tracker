@@ -41,13 +41,13 @@ export default async function seed() {
       lectureBooksId: 'lecture-book-1', 
       bookId: 'book-1', 
       currentPage: 120, 
-      readingStatus: 'in-progress' 
+      readingStatus: 'reading' 
     },
     { 
       lectureBooksId: 'lecture-book-2', 
       bookId: 'book-2', 
       currentPage: 50, 
-      readingStatus: 'in-progress' 
+      readingStatus: 'reading' 
     },
     { 
       lectureBooksId: 'lecture-book-3', 
@@ -59,7 +59,7 @@ export default async function seed() {
       lectureBooksId: 'lecture-book-4', 
       bookId: 'book-4', 
       currentPage: 0, 
-      readingStatus: 'not-started' 
+      readingStatus: 'pending' 
     }
   ]);
 

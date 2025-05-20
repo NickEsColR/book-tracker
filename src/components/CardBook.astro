@@ -19,6 +19,9 @@ const displayAuthors =
 const imageUrl = book.cover_i
   ? `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`
   : null;
+
+// Check if book is a LectureBook
+const isLectureBook = 'lectureBookId' in book;
 ---
 
 <div
@@ -29,6 +32,8 @@ const imageUrl = book.cover_i
   tabindex="0"
   role="button"
   aria-label={`Book: ${displayTitle} by ${displayAuthors.join(", ")}`}
+  data-is-lecture-book={isLectureBook}
+  data-book={JSON.stringify(book)}
 >
   {
     imageUrl ? (
@@ -60,3 +65,28 @@ const imageUrl = book.cover_i
   </div>
   <Bookmark book={book} />
 </div>
+
+<script>
+  import { openDialog } from '../store/bookDialog.store';
+
+  // Get all card books that are LectureBooks
+  const lectureBookCards = document.querySelectorAll('[data-is-lecture-book="true"]');
+  
+  // Add click event listener to open dialog for LectureBooks
+  lectureBookCards.forEach(card => {
+    card.addEventListener('click', (e) => {
+      e.stopPropagation();
+      
+      try {
+        const bookJson = card.getAttribute('data-book');
+        
+        if (bookJson) {
+          const book = JSON.parse(bookJson);
+          openDialog(book);
+        }
+      } catch (error) {
+        console.error('Failed to parse book data:', error);
+      }
+    });
+  });
+</script>

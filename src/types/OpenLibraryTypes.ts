@@ -23,5 +23,5 @@ export interface LectureBook extends Book {
   currentPage: number;
   liked: boolean;
   mainNote: string;
-  readingStatus: 'pending' | 'reading' | 'read';
+  readingStatus: 'pending' | 'reading' | 'completed';
 }
