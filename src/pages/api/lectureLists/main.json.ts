@@ -1,14 +1,22 @@
 import type { LectureBook } from "@/types/OpenLibraryTypes";
 import { fetchLectureListBooks } from "@/utils/lectureListUtils";
 import type { APIRoute } from "astro";
-import { db, LectureLists, eq, and, LectureListBooks, Books, LectureBooks } from "astro:db";
+import {
+  db,
+  LectureLists,
+  eq,
+  and,
+  LectureListBooks,
+  Books,
+  LectureBooks,
+} from "astro:db";
 import { randomUUID } from "crypto";
 
 const TYPE = "main";
 
 export const GET: APIRoute = async ({ locals }) => {
   try {
-    // Get the current user  
+    // Get the current user
     const user = await locals.currentUser();
     if (!user) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
@@ -64,15 +72,17 @@ export const GET: APIRoute = async ({ locals }) => {
     );
   } catch (error) {
     console.error("Error fetching lecture list:", error);
-    return new Response(JSON.stringify({ error: "Failed to fetch lecture list" }), {
-      status: 500,
-      headers: {
-        "Content-Type": "application/json",
+    return new Response(
+      JSON.stringify({ error: "Failed to fetch lecture list" }),
+      {
+        status: 500,
+        headers: {
+          "Content-Type": "application/json",
+        },
       },
-    });
+    );
   }
 };
-
 
 export const POST: APIRoute = async ({ locals, request }) => {
   try {
@@ -112,9 +122,9 @@ export const POST: APIRoute = async ({ locals, request }) => {
       };
       await db.insert(LectureLists).values(newLectureList);
       lectureList = await db
-      .select()
-      .from(LectureLists)
-      .where(and(eq(LectureLists.type, TYPE), eq(LectureLists.userId, id)));
+        .select()
+        .from(LectureLists)
+        .where(and(eq(LectureLists.type, TYPE), eq(LectureLists.userId, id)));
     }
 
     // check if the book already exists and if not add it
@@ -138,32 +148,28 @@ export const POST: APIRoute = async ({ locals, request }) => {
         .where(eq(Books.openLibraryKey, lectureBook.key));
     }
 
-    // check if there is already a lecture book with this bookId in any list of the user
+    // check if there is already a lecture book for this book
     const bookId = Book[0].bookId;
-    
+
     // Use a single query with joins to check if the user already has this book in any list
-    let lectureBookSaved = await db
+    let lectureBookFound = await db
       .select({
-        lectureBooksId: LectureBooks.lectureBooksId
+        lectureBooksId: LectureBooks.lectureBooksId,
+        lectureListId: LectureListBooks.listId,
       })
       .from(LectureBooks)
       .innerJoin(
         LectureListBooks,
-        eq(LectureBooks.lectureBooksId, LectureListBooks.lectureBookId)
+        eq(LectureBooks.lectureBooksId, LectureListBooks.lectureBookId),
       )
-      .innerJoin(
-        LectureLists,
-        eq(LectureListBooks.listId, LectureLists.listId)
-      )
-      .where(
-        and(
-          eq(LectureBooks.bookId, bookId),
-          eq(LectureLists.userId, id)
-        )
-      );
+      .innerJoin(LectureLists, eq(LectureListBooks.listId, LectureLists.listId))
+      .where(and(eq(LectureBooks.bookId, bookId), eq(LectureLists.userId, id)));
 
-      // If the user doesnt have this book in any list, add it to the lecture Book
-    if (!lectureBookSaved || lectureBookSaved.length === 0) {
+    console.log("lectureBookFound", lectureBookFound);
+
+    let lectureBookSaved;
+    // If the user doesnt have this book in any list, create a new lecture book
+    if (!lectureBookFound || lectureBookFound.length === 0) {
       const newLectureBook = {
         lectureBooksId: randomUUID(),
         currentPage: lectureBook.currentPage,
@@ -175,13 +181,44 @@ export const POST: APIRoute = async ({ locals, request }) => {
       await db.insert(LectureBooks).values(newLectureBook);
       lectureBookSaved = await db
         .select({
-        lectureBooksId: LectureBooks.lectureBooksId
-      })
+          lectureBooksId: LectureBooks.lectureBooksId,
+        })
         .from(LectureBooks)
         .where(eq(LectureBooks.bookId, bookId));
     }
-    
-    // Add the lecture book to the lecture list
+
+    // If lecture book is not part of the list we are going to save.
+    if (
+      lectureBookFound &&
+      lectureBookFound.length > 0
+    ) {
+      const isSavedInList = lectureBookFound.some(
+        (item) => item.lectureListId === lectureList[0].listId,
+      );
+      if (isSavedInList) {
+        return new Response(
+          JSON.stringify({
+            message: "Lecture book already exists in the list",
+          }),
+          {
+            status: 200,
+            headers: {
+              "Content-Type": "application/json",
+            },
+          },
+        );
+      }
+    }
+
+    //Add the lecture book to the lecture list
+    if (!lectureBookSaved || lectureBookSaved.length === 0) {
+      lectureBookSaved = await db
+        .select({
+          lectureBooksId: LectureBooks.lectureBooksId,
+        })
+        .from(LectureBooks)
+        .where(eq(LectureBooks.bookId, bookId));
+    }
     await db.insert(LectureListBooks).values({
       listId: lectureList[0].listId,
       lectureBookId: lectureBookSaved[0].lectureBooksId,
@@ -200,11 +237,14 @@ export const POST: APIRoute = async ({ locals, request }) => {
     );
   } catch (error) {
     console.error("Error adding lecture book:", error);
-    return new Response(JSON.stringify({ error: "Failed to add lecture book" }), {
-      status: 500,
-      headers: {
-        "Content-Type": "application/json",
+    return new Response(
+      JSON.stringify({ error: "Failed to add lecture book" }),
+      {
+        status: 500,
+        headers: {
+          "Content-Type": "application/json",
+        },
       },
-    });
+    );
   }
-}
+};
