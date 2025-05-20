@@ -1,12 +1,12 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import ListsLayout from "@/layouts/ListsLayout.astro";
-import GridBooks from "@/components/GridBooks.astro";
+import GridBooks from "@/components/books/GridBooks.astro";
 import { db, eq, LectureLists, LectureListBooks } from "astro:db";
 import { fetchLectureListBooksWithDetails } from "@/utils/lectureListUtils";
 import type { LectureBook } from "@/types/OpenLibraryTypes";
 import type { LectureLists as LectureListInterface } from "@/types/db.types";
-import DialogBookForm from "@/components/DialogBookForm.astro";
+import DialogBookForm from "@/components/books/DialogBookForm.astro";
 
 // Get the current user's ID from auth
 const { userId } = await Astro.locals.auth();
