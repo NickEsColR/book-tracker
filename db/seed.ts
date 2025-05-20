@@ -2,6 +2,9 @@ import { Books, db, LectureBooks, LectureListBooks, LectureLists, Notes } from '
 
 
 // https://astro.build/db/seed
+/**
+ * Seeds the database with initial data for books, lecture books, notes, and lecture lists.
+ */
 export default async function seed() {
   // Insertar libros
   await db.insert(Books).values([

@@ -1,6 +1,24 @@
 import type { APIRoute } from "astro";
 import { db, eq, LectureLists, LectureListBooks, and } from "astro:db";
 
+/**
+ * API route to delete a book from a specific lecture list.
+ * @param {Object} locals - The local context containing authentication information.
+ * @param {Object} params - The route parameters.
+ * @returns {Response} The API response.
+ * @throws {Error} If an error occurs during the process.
+ * @description This route allows the user to delete a book from a specific lecture list.
+ *             It checks if the user is authenticated and if the lecture list belongs to the user.
+ *            If the book is not found or if the user is not authorized, it returns an error response.
+ * *            If the deletion is successful, it returns a success message.
+ * @example
+ * // Example request to delete a book from a lecture list
+ * DELETE /api/lectureLists/[listId]/[lectureBookId]
+ * {
+ *  "listId": "12345",
+ * "lectureBookId": "67890"
+ * }
+ */
 export const DELETE: APIRoute = async ({ locals, params }) => {
   try {
     // Validate user authentication

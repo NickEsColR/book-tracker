@@ -2,6 +2,15 @@ import type { OpenLibraryResponse } from "@/types/OpenLibraryTypes";
 
 const BASE_URL = "http://openlibrary.org/search.json?fields=key,title,cover_i,author_name";
 
+/**
+ * Fetches books from the OpenLibrary API based on title, authors, genres, offset, and limit.
+ * @param title The title of the book to search for.
+ * @param authors The authors of the book to search for.
+ * @param genres The genres of the book to search for.
+ * @param offset The offset for pagination.
+ * @param limit The limit for the number of results per page.
+ * @returns A promise that resolves to an OpenLibraryResponse object.
+ */
 export const getBooks = async (title?: string | null, authors?: string | null, genres?: string | null, offset?: number, limit?: number): Promise<OpenLibraryResponse> => {
   if (!title && !authors && !genres) {
     title = "all";

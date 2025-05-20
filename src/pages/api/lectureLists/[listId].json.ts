@@ -2,6 +2,12 @@ import type { APIRoute } from "astro";
 import { db, eq, LectureLists, LectureListBooks } from "astro:db";
 import { fetchLectureListBooks } from "@/utils/lectureListUtils";
 
+/**
+ * API route to get a specific lecture list and its associated books.
+ * @param {Object} params - The route parameters.
+ * @param {string} params.listId - The ID of the lecture list to retrieve.
+ * @returns {Response} The API response.
+ */
 export const GET: APIRoute = async ({ params }) => {
   try {
     const { listId } = params;

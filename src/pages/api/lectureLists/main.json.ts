@@ -14,6 +14,9 @@ import { randomUUID } from "crypto";
 
 const TYPE = "main";
 
+/**
+ * API route to get the books for main lecture list for the current user.
+ */
 export const GET: APIRoute = async ({ locals }) => {
   try {
     // Get the current user
@@ -84,6 +87,9 @@ export const GET: APIRoute = async ({ locals }) => {
   }
 };
 
+/**
+ * API route to add a book to the main lecture list for the current user.
+ */
 export const POST: APIRoute = async ({ locals, request }) => {
   try {
     // Get the current user

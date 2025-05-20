@@ -2,6 +2,48 @@
 
 Book Tracker is a web application designed to help you manage and track your favorite books. Built with Astro, this application allows users to add books to their reading list, view book details, and manage their reading progress.
 
+## Table of Contents
+
+- [Project Description](#project-description)
+- [Demo Link](#demo-link)
+- [Screenshots](#screenshots)
+- [Features](#-features)
+- [Future Features](#-future-features)
+- [Project Structure](#-project-structure)
+- [Commands](#-commands)
+- [Technologies Used](#️-technologies-used)
+- [Clerk Integration](#clerk-integration)
+- [License](#-license)
+- [Contributing](#-contributing)
+- [Contact](#-contact)
+
+## Project Description
+
+Book Tracker is a web application designed to help you manage and track your favorite books. Built with Astro, this application allows users to add books to their reading list, view book details, and manage their reading progress. The application aims to provide a seamless and intuitive experience for book lovers to organize their reading journey.
+
+## Demo Link
+
+[Link to live demo - to be added]
+
+## Screenshots
+
+[Space for screenshots or GIFs - to be added]
+
+## 📚 Features
+
+- **Add books to the reading list**: Allows users to add books to their reading list.
+- **View book details**: Displays detailed information about each book, including author, genre, publication year, and number of pages.
+- **Manage reading progress**: Users can update their reading progress and save this information to local storage.
+- **Intuitive user interface**: A clean and easy-to-use user interface, built with reusable Astro components.
+
+## 🔮 Future Features
+
+- **Download and upload lecture list**: Allow users to download books in the list and upload it to persist their collection.
+- **Use OpenLibrary API to get books**: Increase the books pool by using the API provided by Open Library.
+- **Social features**: Enable users to share their reading lists and progress with friends.
+- **Advanced search**: Implement advanced search functionality to filter books by various criteria.
+- **Sign Up**: Allow users to create an account to manage the lecture list, preferences and get suggestions.
+
 ## 🚀 Project Structure
 
 Inside of your Astro project, you'll see the following folders and files:
@@ -40,26 +82,22 @@ All commands are run from the root of the project, from a terminal:
 | `bun astro ...`           | Run CLI commands like `astro add`, `astro check` |
 | `bun astro -- --help`     | Get help using the Astro CLI                     |
 
-## 📚 Features
-
-- **Add books to the reading list**: Allows users to add books to their reading list.
-- **View book details**: Displays detailed information about each book, including author, genre, publication year, and number of pages.
-- **Manage reading progress**: Users can update their reading progress and save this information to local storage.
-- **Intuitive user interface**: A clean and easy-to-use user interface, built with reusable Astro components.
-
-## 🔮 Future Features
-
-- **Download and upload lecture list**: Allow users to download books in the list and upload it to persist their collection.
-- **Use OpenLibrary API to get books**: Increase the books pool by using the API provided by Open Library.
-- **Social features**: Enable users to share their reading lists and progress with friends.
-- **Advanced search**: Implement advanced search functionality to filter books by various criteria.
-- **Sign Up**: Allow users to create an account to manage the lecture list, preferences and get suggestions.
-
 ## 🛠️ Technologies Used
 
 - **Astro**: A modern framework for building fast, optimized websites.
 - **TypeScript**: A superset of JavaScript that adds static types.
 - **Bun**: A new, fast, and modern package manager.
+- **Clerk**: For user authentication and management.
+
+## Clerk Integration
+
+Clerk is used in this project to handle user authentication. It provides a secure and easy way to manage user sign-up, sign-in, and session management.
+
+Key aspects of Clerk integration:
+
+- **Authentication Middleware**: The `src/middleware.ts` file uses `clerkMiddleware` from `@clerk/astro/server` to protect routes and manage user sessions.
+- **Environment Variables**: Clerk integration relies on environment variables such as `PUBLIC_CLERK_PUBLISHABLE_KEY` and `CLERK_SECRET_KEY` for its configuration. These are typically stored in a `.env` file (a `.env.template` is provided in the repository).
+- **UI Components**: Clerk's pre-built UI components can be (or are planned to be) integrated for sign-in and sign-up flows, providing a seamless user experience. (Further details on specific components used can be added here as the project evolves).
 
 ## 📄 License
 

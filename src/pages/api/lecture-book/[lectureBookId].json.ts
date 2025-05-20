@@ -3,6 +3,29 @@ import type { APIRoute } from "astro";
 import { db, LectureBooks, eq, LectureListBooks, LectureLists, and } from "astro:db";
 import { randomUUID } from "crypto";
 
+/**
+ * API route to update a lecture book's details for the user.
+ * @param {Object} locals - The local context containing authentication information.
+ * @param {Object} params - The route parameters.
+ * @param {Request} request - The HTTP request object.
+ * @returns {Response} The API response.
+ * @throws {Error} If an error occurs during the process.
+ * @description This route allows the user to update the details of a specific lecture book.
+ *              It checks if the user is authenticated and if the lecture book belongs to the user.
+ *              If the book is liked or unliked, it updates the corresponding lecture list.
+ *              It also updates the current page, main note, and reading status of the book.
+ *              If the book is not found or if the user is not authorized, it returns an error response.
+ *              If the update is successful, it returns a success message.
+ * @example
+ * // Example request to update a lecture book
+ * PUT /api/lecture-book/12345
+ * {
+ *   "currentPage": 100,
+ *   "liked": true,
+ *   "mainNote": "This is a great book!",
+ *   "readingStatus": "reading"
+ * }
+ */
 export const PUT:APIRoute = async ({ locals, params, request }) => {
   try {
     const { userId } = locals.auth();
