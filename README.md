@@ -25,7 +25,7 @@ Book Tracker is a web application designed to help you manage and track your fav
 
 [https://booktracker-nickescolr.netlify.app/](https://booktracker-nickescolr.netlify.app/)
 
-## Screenshots & usage
+## Screenshots
 
 ![landing](docs/imgs/image.png)
 ![explore books](docs/imgs/image-1.png)
