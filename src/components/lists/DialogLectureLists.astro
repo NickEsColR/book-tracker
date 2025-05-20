@@ -1,0 +1,174 @@
+---
+import { db, eq, LectureLists } from "astro:db";
+import SignInSignOutNav from "@/components/ui/SignInSignOutNav.astro";
+import type { LectureLists as LectureListInterface } from "@/types/db.types";
+
+const { userId } = Astro.locals.auth();
+
+let lectureLists: LectureListInterface[] = [];
+let error = null;
+
+if (userId) {
+  try {
+    lectureLists = (await db
+      .select()
+      .from(LectureLists)
+      .where(eq(LectureLists.userId, userId))) as LectureListInterface[];
+  } catch (error) {
+    console.error("Error fetching lecture lists:", error);
+    error = "Error fetching lecture lists";
+  }
+}
+---
+
+<div
+  id="dialog-lists"
+  class="fixed inset-0 z-40 min-h-full overflow-y-auto overflow-x-hidden transition flex items-center"
+  style="display: none;"
+>
+  <!-- overlay -->
+  <div
+    aria-hidden="true"
+    class="fixed inset-0 w-full h-full bg-black/50 cursor-pointer"
+    id="overlay-dialog"
+  >
+  </div>
+
+  <!-- Modal -->
+  <div
+    class="relative w-full max-w-md mx-auto pointer-events-auto transition my-auto p-4"
+  >
+    <button
+      id="close-btn"
+      class="absolute top-8 right-8 text-white p-1 rounded-full bg-red-500 hover:opacity-80 focus:opacity-80 transition-opacity duration-300 ease-in-out cursor-pointer"
+    >
+      <span class="sr-only">Cerrar</span>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M6 18L18 6M6 6l12 12"></path>
+      </svg>
+    </button>
+    {
+      !userId ? (
+        <div class="flex flex-col items-center justify-center w-full h-full p-8 text-center bg-gray-900 rounded-lg">
+          <div class="bg-gray-800 rounded-full w-14 h-14 flex items-center justify-center mb-4">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-8 w-8 text-white"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
+              />
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold text-white leading-tight mb-4">
+            ¡Para usar listas necesitas una cuenta!
+          </h3>
+          <p class="mb-6 text-sm text-gray-300">
+            Añade títulos a tu Lista de lectura y realiza el seguimiento de tus
+            libros favoritos. Recuerda siempre en que pagina te quedaste, que
+            libros has leido, cuales tienes pendientes y cuales has terminado.
+          </p>
+          <p class="mb-6 text-sm text-gray-300">
+            Añade libros a tu lista de lectura y empieza a leer.
+          </p>
+
+          <SignInSignOutNav />
+        </div>
+      ) : (
+        <div class="flex flex-col w-full h-full p-4 bg-gray-800 bg-opacity-90 rounded-lg">
+          <h3 class="text-xl font-bold text-white leading-tight mb-2 text-center">
+            Añadir a lista
+          </h3>
+          
+          <div class="flex flex-col gap-1 mt-2">
+            {lectureLists.length > 0 ? 
+              lectureLists.map((list) => (
+                <div class="flex items-center justify-between w-full p-3 hover:bg-gray-700 transition duration-200 rounded-md">
+                  <div class="flex items-center">
+                    <span class="inline-flex items-center justify-center h-6 w-6 rounded-full bg-yellow-500 mr-2">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                      </svg>
+                    </span>
+                    <span class="text-sm text-white">{list.name}</span>
+                  </div>
+                  <div class="flex-shrink-0">
+                    <input type="checkbox" class="h-5 w-5 rounded text-yellow-500 focus:ring-yellow-500">
+                  </div>
+                </div>
+              ))
+            : 
+              <p class="text-sm text-gray-300 p-3">
+                No tienes listas de lectura. Crea una para empezar.
+              </p>
+            }
+            
+            <!-- Create new list option -->
+            <div class="flex items-center justify-between w-full p-3 my-1 hover:bg-gray-700 transition duration-200 rounded-md">
+              <div class="flex items-center">
+                <span class="inline-flex items-center justify-center h-6 w-6 rounded-full bg-yellow-500 mr-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
+                </span>
+                <span class="text-sm text-white">Crear nueva</span>
+              </div>
+              <div class="flex-shrink-0 bg-yellow-500 rounded-full h-6 w-6 flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                </svg>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Submit button -->
+          <button id="submit-lists" class="w-full p-3 mt-4 bg-yellow-500 rounded-lg text-black font-medium hover:bg-yellow-400 transition duration-200">
+            Listo
+          </button>
+        </div>
+      )
+    }
+  </div>
+</div>
+
+<!-- handle open and close dialog -->
+<script>
+  import { listsDialogOpen } from "@/store/listsDialog.store";
+
+  const dialog = document.querySelector("#dialog-lists") as HTMLDivElement;
+  const closeBtn = document.querySelector("#close-btn") as HTMLButtonElement;
+  const overlay = document.querySelector("#overlay-dialog") as HTMLDivElement;
+
+  // Listen to changes in the store, and show/hide the dialog accordingly
+  listsDialogOpen.subscribe((open) => {
+    if (open) {
+      dialog.style.display = "flex";
+    } else {
+      dialog.style.display = "none";
+    }
+  });
+
+  // Close dialog
+  const closeModal = () => {
+    listsDialogOpen.set(false);
+  };
+
+  closeBtn.addEventListener("click", closeModal);
+  overlay.addEventListener("click", closeModal);
+</script>

@@ -5,6 +5,7 @@ import Input from "@/components/ui/input.astro";
 
 import { getBooks } from "@/utils/booksApi";
 import { MAIN_SUBJECTS } from "@/consts/subjects";
+import DialogLectureLists from "@/components/lists/DialogLectureLists.astro";
 
 const LIMIT = 24; //24 * n
 
@@ -36,6 +37,7 @@ const buildPageUrl = (pageNumber: number) => {
 ---
 
 <Layout>
+  <DialogLectureLists />
   <div class="container mx-auto py-8">
     <section class="col-span-2">
       <GridBooks books={books}>

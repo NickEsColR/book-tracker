@@ -43,67 +43,16 @@ const isLectureBook = getIsLectureBook(book);
   </svg>
 </button>
 
+<!-- open the list dialog -->
 <script>
-  const bookmarkBtns = Array.from(
-    document.querySelectorAll("#bookmark-btn")
-  ) as HTMLButtonElement[];
-  bookmarkBtns.forEach((btn) => {
-    btn.addEventListener("click", (e) => {
+  import { openDialog } from "@/store/listsDialog.store";
+
+  const bookmarkBtn = document.querySelector("#bookmark-btn") as HTMLButtonElement;
+
+  if (bookmarkBtn) {
+    bookmarkBtn.addEventListener("click", (e: MouseEvent) => {
       e.stopPropagation();
-      const bookData = JSON.parse(
-        (e.currentTarget as HTMLButtonElement).dataset.book || "{}"
-      );
-      
-      // Check if book is already in lecture list (isLectureBook)
-      const isLectureBook = (bookData.lectureBookId !== undefined);
-      const method = isLectureBook ? "DELETE" : "POST";
-      
-      // Determine the correct endpoint 
-      let endpoint = "/api/lectureLists/main.json";
-      if (isLectureBook) {
-        // For DELETE operations, use the specific endpoint with lectureBookId
-        // Assuming the list is always "main" - adjust if you have multiple lists
-        const listId = btn.dataset.listId;
-        if (!listId) {
-          console.error("List ID is required for DELETE operation.");
-          return;
-        }
-        endpoint = `/api/lectureLists/${listId}/${bookData.lectureBookId}.json`;
-      }
-      
-      fetch(endpoint, {
-        method: method,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(bookData),
-      })
-        .then((response) => {
-          if (!response.ok) {
-            if (response.status === 401) {
-              // TODO: enhanced sugestion to improve user experience
-              const authMsg = isLectureBook
-                ? "Por favor, inicia sesión para eliminar libros de tu lista de lectura."
-                : "Por favor, inicia sesión para guardar libros en tu lista de lectura.";
-              alert(authMsg);
-              throw new Error("Usuario no autenticado");
-            }
-            const errorMsg = isLectureBook 
-              ? "Error al eliminar el libro. Por favor, inténtalo de nuevo." 
-              : "Error al guardar el libro. Por favor, inténtalo de nuevo.";
-            alert(errorMsg);
-            throw new Error(isLectureBook ? "Error al eliminar el libro" : "Error al guardar el libro");
-          }
-          return response.json();
-        })
-        .then((data) => {
-          // Mostrar alerta de confirmación
-          const successMsg = isLectureBook ? "Libro eliminado" : "Libro guardado";
-          alert(successMsg);
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-        });
+      e.preventDefault();
+      openDialog();
     });
-  });
-</script>
+  }

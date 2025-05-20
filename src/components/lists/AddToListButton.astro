@@ -1,0 +1,29 @@
+---
+interface Props {
+  class?: string;
+}
+
+const { class: className = "" } = Astro.props;
+---
+
+<button 
+  id="add-to-list-btn" 
+  class={`flex items-center gap-2 text-white bg-indigo-600 hover:bg-indigo-700 px-3 py-2 rounded-md transition ${className}`}
+>
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+  </svg>
+  <span>Añadir a lista</span>
+</button>
+
+<script>
+  import { listsDialogOpen } from "@/store/listsDialog.store";
+  
+  const addToListBtn = document.querySelector("#add-to-list-btn");
+  
+  if (addToListBtn) {
+    addToListBtn.addEventListener("click", () => {
+      listsDialogOpen.set(true);
+    });
+  }
+</script>

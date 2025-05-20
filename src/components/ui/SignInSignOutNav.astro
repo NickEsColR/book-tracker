@@ -1,14 +1,22 @@
 ---
-import { SignedOut, SignInButton, SignedIn, UserButton } from "@clerk/astro/components";
+import {
+  SignedOut,
+  SignInButton,
+  SignedIn,
+  UserButton,
+} from "@clerk/astro/components";
 ---
 
 <nav>
-    <SignedOut>
-      <SignInButton mode="modal" asChild>
-        <button class="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer hover:opacity-80 focus:opacity-80 transition-opacity">Iniciar Sesión</button>
-      </SignInButton>
-    </SignedOut>
-    <SignedIn>
-      <UserButton />
-    </SignedIn>
-  </nav>
+  <SignedOut>
+    <SignInButton mode="modal" asChild>
+      <button
+        class="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer hover:opacity-80 focus:opacity-80 transition-opacity"
+        >Iniciar Sesión</button
+      >
+    </SignInButton>
+  </SignedOut>
+  <SignedIn>
+    <UserButton />
+  </SignedIn>
+</nav>

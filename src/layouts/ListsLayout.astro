@@ -1,4 +1,6 @@
 ---
+import DialogLectureLists from '@/components/lists/DialogLectureLists.astro';
+
 interface Props {
   currentTab: "my-lists" | "public-lists";
 }
@@ -37,4 +39,5 @@ const isPublicLists = currentTab === "public-lists";
     </li>
   </ul>
 </div>
+<DialogLectureLists />
 <slot />

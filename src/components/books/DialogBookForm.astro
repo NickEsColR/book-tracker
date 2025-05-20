@@ -3,7 +3,7 @@
 ---
 
 <div
-  id="dialog"
+  id="dialog-book"
   class="fixed inset-0 z-40 min-h-full overflow-y-auto overflow-x-hidden transition flex items-center"
 >
   <!-- overlay -->
@@ -130,18 +130,18 @@
 <script>
   import { bookData, isOpen } from "@/store/bookDialog.store";
 
-  const dialog = document.querySelector("#dialog") as HTMLDivElement;
-  const title = document.querySelector("#book-title") as HTMLHeadingElement;
-  const authors = document.querySelector("#authors") as HTMLParagraphElement;
-  const coverImg = document.querySelector("#book-cover") as HTMLImageElement;
+  const dialog = document.querySelector("#dialog-book") as HTMLDivElement;
+  const title = dialog.querySelector("#book-title") as HTMLHeadingElement;
+  const authors = dialog.querySelector("#authors") as HTMLParagraphElement;
+  const coverImg = dialog.querySelector("#book-cover") as HTMLImageElement;
 
-  const closeBtn = document.querySelector("#close-btn") as HTMLButtonElement;
-  const overlay = document.querySelector("#overlay-dialog") as HTMLDivElement;
+  const closeBtn = dialog.querySelector("#close-btn") as HTMLButtonElement;
+  const overlay = dialog.querySelector("#overlay-dialog") as HTMLDivElement;
 
-  const inputPage = document.querySelector("#page") as HTMLInputElement;
-  const selectStatus = document.querySelector("#reading-status") as HTMLSelectElement;
-  const checkboxLiked = document.querySelector("#liked") as HTMLInputElement;
-  const textareaNote = document.querySelector("#main-note") as HTMLTextAreaElement;
+  const inputPage = dialog.querySelector("#page") as HTMLInputElement;
+  const selectStatus = dialog.querySelector("#reading-status") as HTMLSelectElement;
+  const checkboxLiked = dialog.querySelector("#liked") as HTMLInputElement;
+  const textareaNote = dialog.querySelector("#main-note") as HTMLTextAreaElement;
 
   // Listen to changes in the store, and show/hide the dialog accordingly
   isOpen.subscribe((open) => {
