@@ -90,6 +90,7 @@ export const POST: APIRoute = async ({ locals, request }) => {
     lectureBook.currentPage = 0;
     lectureBook.liked = false;
     lectureBook.readingStatus = "pending";
+    lectureBook.mainNote = "";
     const authors = lectureBook.author_name
       ? lectureBook.author_name.join(",")
       : "";
@@ -168,6 +169,8 @@ export const POST: APIRoute = async ({ locals, request }) => {
         currentPage: lectureBook.currentPage,
         readingStatus: lectureBook.readingStatus,
         bookId: Book[0].bookId,
+        liked: lectureBook.liked || false,
+        mainNote: lectureBook.mainNote || null,
       };
       await db.insert(LectureBooks).values(newLectureBook);
       lectureBookSaved = await db

@@ -4,9 +4,11 @@ import { Books } from "db/models/Books";
 export const LectureBooks = defineTable({
   columns: {
     lectureBooksId: column.text({ primaryKey: true }),
-    currentPage: column.number(),
-    readingStatus: column.text(),
+    currentPage: column.number({ default: 0 }),
+    readingStatus: column.text({default: "pending"}),
     bookId: column.text(),
+    liked: column.boolean({ default: false }),
+    mainNote: column.text({ optional: true }),
   },
   foreignKeys: [
     {

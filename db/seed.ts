@@ -41,25 +41,33 @@ export default async function seed() {
       lectureBooksId: 'lecture-book-1', 
       bookId: 'book-1', 
       currentPage: 120, 
-      readingStatus: 'reading' 
+      readingStatus: 'reading',
+      liked: true,
+      mainNote: 'Este libro me está gustando mucho, especialmente los personajes principales.'
     },
     { 
       lectureBooksId: 'lecture-book-2', 
       bookId: 'book-2', 
       currentPage: 50, 
-      readingStatus: 'reading' 
+      readingStatus: 'reading',
+      liked: false,
+      mainNote: 'La historia avanza lentamente, pero la prosa es excelente.'
     },
     { 
       lectureBooksId: 'lecture-book-3', 
       bookId: 'book-3', 
       currentPage: 200, 
-      readingStatus: 'completed' 
+      readingStatus: 'completed',
+      liked: true,
+      mainNote: 'Una de las mejores historias de fantasía que he leído.'
     },
     { 
       lectureBooksId: 'lecture-book-4', 
       bookId: 'book-4', 
       currentPage: 0, 
-      readingStatus: 'pending' 
+      readingStatus: 'pending',
+      liked: false,
+      mainNote: null
     }
   ]);
 

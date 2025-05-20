@@ -48,10 +48,6 @@ export async function fetchLectureListBooksWithDetails(lectureBookIds: string[])
     if (lectureBook && lectureBook.length > 0) {
       const book = await db.select().from(Books).where(eq(Books.bookId, lectureBook[0].bookId));
       
-      // Get notes for this lecture book
-      const notes = await db.select().from(Notes).where(eq(Notes.lectureBookId, lectureBookId));
-      const mainNote = notes && notes.length > 0 ? notes[0].content : "";
-      
       if (book && book.length > 0) {
         // Convert to LectureBook format with extended data
         const bookData: LectureBook = {
@@ -63,9 +59,9 @@ export async function fetchLectureListBooksWithDetails(lectureBookIds: string[])
           // Add lecture book data
           lectureBookId: lectureBook[0].lectureBooksId,
           currentPage: lectureBook[0].currentPage,
-          readingStatus: lectureBook[0].readingStatus as 'pending' | 'reading' | 'read',
-          liked: false, // Set default value since it's not in the database
-          mainNote: mainNote
+          readingStatus: lectureBook[0].readingStatus as 'pending' | 'reading' | 'completed',
+          liked: lectureBook[0].liked || false, // Use value from database
+          mainNote: lectureBook[0].mainNote || ""
         };
         
         books.push(bookData);

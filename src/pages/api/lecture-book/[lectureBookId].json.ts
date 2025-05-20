@@ -41,10 +41,10 @@ export const PUT:APIRoute = async ({ locals, params, request }) => {
     
     // Assuming requestBody contains the fields to update
     const { currentPage, liked, mainNote, readingStatus } = requestBody as LectureBook;
-    //TODO: if liked is true, add to favorites list
+    
     await db
       .update(LectureBooks)
-      .set({ currentPage, readingStatus })
+      .set({ currentPage, readingStatus, liked, mainNote })
       .where(eq(LectureBooks.lectureBooksId, lectureBookId));
 
     return new Response(JSON.stringify({message: "succesfully updated book"}), {
