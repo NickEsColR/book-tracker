@@ -139,8 +139,9 @@ export const POST: APIRoute = async ({ locals, request }) => {
         openLibraryKey: lectureBook.key,
         title: lectureBook.title ?? "",
         author: authors,
-        cover: lectureBook.cover_i ?? "",
+        cover: String(lectureBook.cover_i ?? ""),
       };
+      console.log("Adding new book:", newBook);
       await db.insert(Books).values(newBook);
       Book = await db
         .select()
@@ -164,8 +165,6 @@ export const POST: APIRoute = async ({ locals, request }) => {
       )
       .innerJoin(LectureLists, eq(LectureListBooks.listId, LectureLists.listId))
       .where(and(eq(LectureBooks.bookId, bookId), eq(LectureLists.userId, id)));
-
-    console.log("lectureBookFound", lectureBookFound);
 
     let lectureBookSaved;
     // If the user doesnt have this book in any list, create a new lecture book
