@@ -5,9 +5,10 @@ import type { Book, LectureBook } from "@/types/OpenLibraryTypes";
 interface Props {
   book: Book | LectureBook;
   canOpenDialog?: boolean;
+  listId?: string;
 }
 
-const { book, canOpenDialog } = Astro.props;
+const { book, canOpenDialog, listId } = Astro.props;
 
 // Validations and default values
 const displayTitle = book.title || "Título no disponible";
@@ -63,7 +64,7 @@ const isLectureBook = 'lectureBookId' in book;
     </h3>
     <p class="text-xs text-gray-300 truncate">{displayAuthors.join(", ")}</p>
   </div>
-  <Bookmark book={book} />
+  <Bookmark book={book} listId={listId} />
 </div>
 
 <script>

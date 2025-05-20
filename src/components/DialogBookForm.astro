@@ -119,13 +119,6 @@
             >
               Actualizar
             </button>
-
-            <button
-              type="button"
-              class="inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset dark:focus:ring-offset-0 min-h-[2.25rem] px-4 text-sm text-white shadow focus:ring-white border-transparent bg-red-500 hover:bg-red-400"
-            >
-              <span class="flex items-center gap-1"> Eliminar </span>
-            </button>
           </div>
         </form>
       </div>
@@ -199,9 +192,6 @@
   const selectStatus = document.querySelector("#reading-status") as HTMLSelectElement;
   const checkboxLiked = document.querySelector("#liked") as HTMLInputElement;
   const textareaNote = document.querySelector("#main-note") as HTMLTextAreaElement;
-  const removeBtn = document.querySelector(
-    "button:last-child"
-  ) as HTMLButtonElement;
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();

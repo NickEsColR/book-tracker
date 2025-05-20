@@ -3,9 +3,10 @@ import type { Book, LectureBook } from "@/types/OpenLibraryTypes";
 
 interface Props {
   book: LectureBook | Book;
+  listId?: string;
 }
 
-const { book } = Astro.props;
+const { book, listId } = Astro.props;
 // check if book is a LectureBook or Book
 const getIsLectureBook = (book: Book | LectureBook): book is LectureBook => {
   return (book as LectureBook).lectureBookId !== undefined;
@@ -23,6 +24,7 @@ const isLectureBook = getIsLectureBook(book);
   ]}
   aria-label="Bookmark this book"
   data-book={JSON.stringify(book)}
+  data-list-id={listId}
   id="bookmark-btn"
 >
   <svg
@@ -56,7 +58,20 @@ const isLectureBook = getIsLectureBook(book);
       const isLectureBook = (bookData.lectureBookId !== undefined);
       const method = isLectureBook ? "DELETE" : "POST";
       
-      fetch("/api/lectureLists/main.json", {
+      // Determine the correct endpoint 
+      let endpoint = "/api/lectureLists/main.json";
+      if (isLectureBook) {
+        // For DELETE operations, use the specific endpoint with lectureBookId
+        // Assuming the list is always "main" - adjust if you have multiple lists
+        const listId = btn.dataset.listId;
+        if (!listId) {
+          console.error("List ID is required for DELETE operation.");
+          return;
+        }
+        endpoint = `/api/lectureLists/${listId}/${bookData.lectureBookId}.json`;
+      }
+      
+      fetch(endpoint, {
         method: method,
         headers: {
           "Content-Type": "application/json",
@@ -82,7 +97,9 @@ const isLectureBook = getIsLectureBook(book);
           return response.json();
         })
         .then((data) => {
-          console.log(isLectureBook ? "Libro eliminado:" : "Libro guardado:", data);
+          // Mostrar alerta de confirmación
+          const successMsg = isLectureBook ? "Libro eliminado" : "Libro guardado";
+          alert(successMsg);
         })
         .catch((error) => {
           console.error("Error:", error);
