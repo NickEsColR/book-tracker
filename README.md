@@ -23,11 +23,17 @@ Book Tracker is a web application designed to help you manage and track your fav
 
 ## Demo Link
 
-[Link to live demo - to be added]
+[https://booktracker-nickescolr.netlify.app/](https://booktracker-nickescolr.netlify.app/)
 
-## Screenshots
+## Screenshots & usage
 
-[Space for screenshots or GIFs - to be added]
+![landing](docs/imgs/image.png)
+![explore books](docs/imgs/image-1.png)
+![lists](docs/imgs/image-2.png)
+![my lists](docs/imgs/image-3.png)
+![main list](docs/imgs/image-4.png)
+![details modal](docs/imgs/image-5.png)
+![gif usage](docs/gifs/usage.gif)
 
 ## 📚 Features
 

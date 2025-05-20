@@ -119,14 +119,14 @@ export default async function seed() {
   // Asociar libros a las listas
   // Lista principal: contiene 3 libros
   await db.insert(LectureListBooks).values([
-    { listId: 'f4b1a98a-7374-47c1-9056-68e708c840ef', lectureBookId: 'lecture-book-1' }, // "Cien años de soledad" en lista principal
-    { listId: 'f4b1a98a-7374-47c1-9056-68e708c840ef', lectureBookId: 'lecture-book-2' }, // "1984" en lista principal
-    { listId: 'f4b1a98a-7374-47c1-9056-68e708c840ef', lectureBookId: 'lecture-book-4' }, // "Steve Jobs" en lista principal
+    { listId: 'f4b1a98a-7374-47c1-9056-68e708c840ef', lectureBookId: 'lecture-book-1' }, 
+    { listId: 'f4b1a98a-7374-47c1-9056-68e708c840ef', lectureBookId: 'lecture-book-2' }, 
+    { listId: 'f4b1a98a-7374-47c1-9056-68e708c840ef', lectureBookId: 'lecture-book-4' }, 
   ]);
 
   // Lista de favoritos: contiene 2 libros
   await db.insert(LectureListBooks).values([
-    { listId: 'f4b1a98a-7374-47c1-9056-68e708c840eg', lectureBookId: 'lecture-book-1' }, // "Cien años de soledad" también en lista de favoritos
-    { listId: 'f4b1a98a-7374-47c1-9056-68e708c840eg', lectureBookId: 'lecture-book-3' }, // "El Hobbit" en lista de favoritos
+    { listId: 'f4b1a98a-7374-47c1-9056-68e708c840eg', lectureBookId: 'lecture-book-1' }, 
+    { listId: 'f4b1a98a-7374-47c1-9056-68e708c840eg', lectureBookId: 'lecture-book-3' }, 
   ]);
 }
