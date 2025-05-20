@@ -1,11 +1,14 @@
-import type { Book, LectureBook } from "@/types";
+import type { LectureBook } from "@/types/OpenLibraryTypes";
 import { atom } from "nanostores";
 
 export const isOpen = atom(false);
-export const bookISBN = atom<string>("");
+export const bookData = atom<LectureBook | null>(null);
 
-// Function to open the dialog
-export const openDialog = (isbn: string) => {
-  bookISBN.set(isbn);
+/**
+ * Opens the dialog with the provided book data.
+ * @param book The book data to display in the dialog.
+ */
+export const openDialog = (book: LectureBook) => {
+  bookData.set(book);
   isOpen.set(true);
 };

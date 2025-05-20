@@ -1,0 +1,28 @@
+---
+import CardBook from "@/components/books/CardBook.astro";
+import type { Book } from "@/types/OpenLibraryTypes";
+
+interface Props {
+  books: Book[];
+  className?: string;
+  listId?: string;
+  isLikedList?: boolean;
+}
+
+const { books, className, listId, isLikedList } = Astro.props;
+---
+
+<div class=`grid gap-4 grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 ${className}`>
+  <slot name="header" />
+  {
+    books.map(
+      (book) => (
+        <CardBook
+          book={book}
+          listId={listId}
+          isLikedList={isLikedList} 
+        />
+      )
+    )
+  }
+</div>

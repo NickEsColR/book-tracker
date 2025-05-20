@@ -1,0 +1,98 @@
+---
+import Bookmark from "@/components/books/Bookmark.astro";
+import type { Book, LectureBook } from "@/types/OpenLibraryTypes";
+
+interface Props {
+  book: Book | LectureBook;
+  canOpenDialog?: boolean;
+  listId?: string;
+  isLikedList?: boolean;
+}
+
+const { book, canOpenDialog, listId, isLikedList } = Astro.props;
+
+// Validations and default values
+const displayTitle = book.title || "Título no disponible";
+const displayAuthors =
+  book.author_name && book.author_name.length > 0
+    ? book.author_name
+    : ["Autor desconocido"];
+
+const imageUrl = book.cover_i
+  ? `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`
+  : null;
+
+// Check if book is a LectureBook
+const isLectureBook = 'lectureBookId' in book;
+---
+
+<div
+  class:list={[
+    "flex relative w-full aspect-[9/16] border border-gray-700 rounded overflow-hidden cursor-pointer group hover:scale-105 focus:scale-105 transition-transform duration-300 ease-in-out",
+    { openDialog: canOpenDialog },
+  ]}
+  tabindex="0"
+  role="button"
+  aria-label={`Book: ${displayTitle} by ${displayAuthors.join(", ")}`}
+  data-is-lecture-book={isLectureBook}
+  data-book={JSON.stringify(book)}
+>
+  {
+    imageUrl ? (
+      <img
+        alt={displayTitle}
+        class="absolute inset-0 w-full h-full object-fill object-center"
+        src={imageUrl}
+      />
+    ) : (
+      <div class="flex flex-col items-center justify-center h-full w-full p-4 text-center bg-gray-800 bg-opacity-40">
+        <h3 class="text-sm font-bold text-white leading-tight">
+          {displayTitle}
+        </h3>
+        <div class="mt-1 text-xs text-gray-300">
+          {displayAuthors.map((author) => (
+            <p>{author}</p>
+          ))}
+        </div>
+      </div>
+    )
+  }
+  <div
+    class="absolute bottom-0 left-0 z-10 w-full bg-blue-800 opacity-0 group-hover:opacity-100 group-focus:opacity-100 transition-opacity duration-300 ease-in-out p-2"
+  >
+    <h3 class="text-sm font-semibold mb-1 text-balance line-clamp-3 text-white">
+      {displayTitle}
+    </h3>
+    <p class="text-xs text-gray-300 truncate">{displayAuthors.join(", ")}</p>
+  </div>
+  {
+    !isLikedList && (  
+      <Bookmark book={book} listId={listId} />
+    )
+  }
+</div>
+
+<script>
+  import { openDialog } from '../../store/bookDialog.store';
+
+  // Get all card books that are LectureBooks
+  const lectureBookCards = document.querySelectorAll('[data-is-lecture-book="true"]');
+  
+  // Add click event listener to open dialog for LectureBooks
+  lectureBookCards.forEach(card => {
+    card.addEventListener('click', (e) => {
+      e.stopPropagation();
+      
+      try {
+        const bookJson = card.getAttribute('data-book');
+        
+        if (bookJson) {
+          const book = JSON.parse(bookJson);
+          openDialog(book);
+        }
+      } catch (error) {
+        console.error('Failed to parse book data:', error);
+      }
+    });
+  });
+</script>

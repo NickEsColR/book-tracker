@@ -1,0 +1,28 @@
+---
+interface Props {
+  type: astroHTML.JSX.HTMLInputTypeAttribute;
+  id: string;
+  label: string;
+  name: string;
+  placeholder: string;
+  value: string;
+  className?: string;
+}
+
+const { type, id, label, name, placeholder, value, className } = Astro.props;
+---
+
+<div class={`relative ${className?.includes('bg-') ? '' : 'bg-inherit'} ${className?.includes('w-') ? '' : 'w-full'} ${className || ''}`}>
+  <input
+    type={type}
+    id={id}
+    name={name}
+    class={`peer bg-transparent h-10 w-full rounded-lg text-gray-200 placeholder-transparent ring-2 px-2 ring-gray-500 focus:ring-blue-50 focus:outline-none`}
+    placeholder={placeholder}
+    value={value}
+  /><label
+    for={id}
+    class="absolute cursor-text left-0 -top-3 text-sm text-gray-500 bg-inherit mx-1 px-1 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-focus:-top-3 peer-focus:text-blue-50 peer-focus:text-sm transition-all lg:text-base"
+    >{label}</label
+  >
+</div>
