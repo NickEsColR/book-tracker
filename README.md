@@ -1,6 +1,6 @@
 # Book Tracker
 
-Book Tracker is a web application designed to help you manage and track your favorite books. Built with Astro, this application allows users to add books to their reading list, view book details, and manage their reading progress.
+Book Tracker is a web application designed to help you manage and track your favorite books. Built with Astro, this application allows users to add books to their reading list, include lecture book details, and manage their reading progress.
 
 ## Table of Contents
 
@@ -32,17 +32,17 @@ Book Tracker is a web application designed to help you manage and track your fav
 ## 📚 Features
 
 - **Add books to the reading list**: Allows users to add books to their reading list.
-- **View book details**: Displays detailed information about each book, including author, genre, publication year, and number of pages.
-- **Manage reading progress**: Users can update their reading progress and save this information to local storage.
+- **View book details**: Displays information about each book, including title, author, genre.
+- **Manage reading progress**: Users can update their reading progress.
 - **Intuitive user interface**: A clean and easy-to-use user interface, built with reusable Astro components.
+- **Save books to favorites**: Users can save books to favorites.
 
 ## 🔮 Future Features
 
 - **Download and upload lecture list**: Allow users to download books in the list and upload it to persist their collection.
-- **Use OpenLibrary API to get books**: Increase the books pool by using the API provided by Open Library.
 - **Social features**: Enable users to share their reading lists and progress with friends.
 - **Advanced search**: Implement advanced search functionality to filter books by various criteria.
-- **Sign Up**: Allow users to create an account to manage the lecture list, preferences and get suggestions.
+- **Create multiple lists**: Allow users to create different lists to better handle books.
 
 ## 🚀 Project Structure
 
@@ -50,21 +50,70 @@ Inside of your Astro project, you'll see the following folders and files:
 
 ```text
 /
+├── db/
+│   ├── config.ts
+│   ├── seed.ts
+│   └── models/
+│       ├── Books.ts
+│       ├── LectureBooks.ts
+│       ├── LectureListBook.ts
+│       ├── lectureLists.ts
+│       └── Notes.ts
 ├── public/
 │   └── favicon.svg
 ├── src/
+│   ├── assets/
 │   ├── components/
-│   │   ├── CardBook.astro
-│   │   ├── DialogBookForm.astro
-│   │   └── GridBooks.astro
+│   │   ├── Hero.astro
+│   │   ├── books/
+│   │   │   ├── Bookmark.astro
+│   │   │   ├── CardBook.astro
+│   │   │   ├── DialogBookForm.astro
+│   │   │   └── GridBooks.astro
+│   │   ├── lists/
+│   │   │   └── MyLectureLists.astro
+│   │   └── ui/
+│   │       ├── Footer.astro
+│   │       ├── Header.astro
+│   │       ├── SignInSignOutNav.astro
+│   │       └── input.astro
+│   ├── consts/
+│   │   └── subjects.ts
 │   ├── layouts/
-│   │   └── Layout.astro
+│   │   ├── Layout.astro
+│   │   └── ListsLayout.astro
+│   ├── middleware.ts
 │   ├── pages/
-│   │   └── index.astro
-│   └── store/
-│       ├── bookDialog.store.ts
-│       └── lectureList.store.ts
-└── package.json
+│   │   ├── books.astro
+│   │   ├── index.astro
+│   │   ├── api/
+│   │   │   ├── lecture-book/
+│   │   │   │   └── [lectureBookId].json.ts
+│   │   │   └── lectureLists/
+│   │   │       ├── [listId].json.ts
+│   │   │       ├── main.json.ts
+│   │   │       └── [listId]/
+│   │   │           └── [lectureBookId].json.ts
+│   │   └── lecture-lists/
+│   │       ├── my-lists.astro
+│   │       ├── public-lists.astro
+│   │       └── my-lists/
+│   │           └── [listId].astro
+│   ├── store/
+│   │   └── bookDialog.store.ts
+│   ├── styles/
+│   │   └── global.css
+│   ├── types/
+│   │   ├── OpenLibraryTypes.ts
+│   │   └── db.types.ts
+│   └── utils/
+│       ├── booksApi.ts
+│       └── lectureListUtils.ts
+├── .env.template
+├── astro.config.mjs
+├── package.json
+├── pnpm-lock.yaml
+└── tsconfig.json
 ```
 
 To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
@@ -86,12 +135,15 @@ All commands are run from the root of the project, from a terminal:
 
 - **Astro**: A modern framework for building fast, optimized websites.
 - **TypeScript**: A superset of JavaScript that adds static types.
-- **Bun**: A new, fast, and modern package manager.
+- **pnpm**: A new, fast, and modern package manager.
 - **Clerk**: For user authentication and management.
+- **AstroDB**: Library to handle SQLite database.
 
 ## Clerk Integration
 
 Clerk is used in this project to handle user authentication. It provides a secure and easy way to manage user sign-up, sign-in, and session management.
+
+The userId provided by clerk is used to manage the lists for an specific user. Check permissions to handle a list and save the users lecture book information.
 
 Key aspects of Clerk integration:
 
