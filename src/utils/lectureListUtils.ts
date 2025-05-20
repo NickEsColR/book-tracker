@@ -1,5 +1,5 @@
-import { db, eq, Books, LectureBooks } from "astro:db";
-import type { Book } from "@/types/OpenLibraryTypes";
+import { db, eq, and, Books, LectureBooks, Notes } from "astro:db";
+import type { Book, LectureBook } from "@/types/OpenLibraryTypes";
 
 /**
  * Fetches books associated with a lecture list by their lecture book IDs
@@ -23,6 +23,49 @@ export async function fetchLectureListBooks(lectureBookIds: string[]): Promise<B
           author_name: [book[0].author],
           cover_i: book[0].cover,
           isbn: []
+        };
+        
+        books.push(bookData);
+      }
+    }
+  }
+  
+  return books;
+}
+
+/**
+ * Fetches books associated with a lecture list by their lecture book IDs
+ * including additional information from LectureBooks table and notes
+ * @param lectureBookIds Array of lecture book IDs to fetch
+ * @returns Array of books in the extended LectureBook format
+ */
+export async function fetchLectureListBooksWithDetails(lectureBookIds: string[]): Promise<LectureBook[]> {
+  const books: LectureBook[] = [];
+  
+  for (const lectureBookId of lectureBookIds) {
+    const lectureBook = await db.select().from(LectureBooks).where(eq(LectureBooks.lectureBooksId, lectureBookId));
+    
+    if (lectureBook && lectureBook.length > 0) {
+      const book = await db.select().from(Books).where(eq(Books.bookId, lectureBook[0].bookId));
+      
+      // Get notes for this lecture book
+      const notes = await db.select().from(Notes).where(eq(Notes.lectureBookId, lectureBookId));
+      const mainNote = notes && notes.length > 0 ? notes[0].content : "";
+      
+      if (book && book.length > 0) {
+        // Convert to LectureBook format with extended data
+        const bookData: LectureBook = {
+          key: book[0].openLibraryKey,
+          title: book[0].title,
+          author_name: [book[0].author],
+          cover_i: book[0].cover,
+          isbn: [],
+          // Add lecture book data
+          lectureBookId: lectureBook[0].lectureBooksId,
+          currentPage: lectureBook[0].currentPage,
+          readingStatus: lectureBook[0].readingStatus as 'pending' | 'reading' | 'read',
+          liked: false, // Set default value since it's not in the database
+          mainNote: mainNote
         };
         
         books.push(bookData);

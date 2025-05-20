@@ -19,6 +19,7 @@ export interface Book {
 }
 
 export interface LectureBook extends Book {
+  lectureBookId: string;
   currentPage: number;
   liked: boolean;
   mainNote: string;

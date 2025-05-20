@@ -15,8 +15,6 @@ if (userId) {
       .select()
       .from(LectureLists)
       .where(eq(LectureLists.userId, userId)) as LectureListInterface[];
-    
-    console.log("Lecture lists data:", { lectureLists });
   } catch (error) {
     console.error("Error fetching lecture lists:", error);
     error = "Error fetching lecture lists";
