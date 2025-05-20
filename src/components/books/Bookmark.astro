@@ -1,0 +1,92 @@
+---
+import type { Book, LectureBook } from "@/types/OpenLibraryTypes";
+
+interface Props {
+  book: LectureBook | Book;
+}
+
+const { book } = Astro.props;
+// check if book is a LectureBook or Book
+const getIsLectureBook = (book: Book | LectureBook): book is LectureBook => {
+  return (book as LectureBook).lectureBookId !== undefined;
+};
+const isLectureBook = getIsLectureBook(book);
+---
+
+<button
+  class:list={[
+    "absolute top-0 right-0 z-10 -mt-1 cursor-pointer transition-opacity duration-300 ease-in-out",
+    {
+      "opacity-50 hover:opacity-100 focus:opacity-100": !isLectureBook,
+      "opacity-100 hover:opacity-50 focus:opacity-50": isLectureBook,
+    },
+  ]}
+  aria-label="Bookmark this book"
+  data-book={JSON.stringify(book)}
+  id="bookmark-btn"
+>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="48"
+    height="48"
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    class="text-neutral-500 drop-shadow-md"
+  >
+    <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"></path>
+  </svg>
+</button>
+
+<script>
+  const bookmarkBtns = Array.from(
+    document.querySelectorAll("#bookmark-btn")
+  ) as HTMLButtonElement[];
+  bookmarkBtns.forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const bookData = JSON.parse(
+        (e.currentTarget as HTMLButtonElement).dataset.book || "{}"
+      );
+      
+      // Check if book is already in lecture list (isLectureBook)
+      const isLectureBook = (bookData.lectureBookId !== undefined);
+      const method = isLectureBook ? "DELETE" : "POST";
+      
+      fetch("/api/lectureLists/main.json", {
+        method: method,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(bookData),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            if (response.status === 401) {
+              // TODO: enhanced sugestion to improve user experience
+              const authMsg = isLectureBook
+                ? "Por favor, inicia sesión para eliminar libros de tu lista de lectura."
+                : "Por favor, inicia sesión para guardar libros en tu lista de lectura.";
+              alert(authMsg);
+              throw new Error("Usuario no autenticado");
+            }
+            const errorMsg = isLectureBook 
+              ? "Error al eliminar el libro. Por favor, inténtalo de nuevo." 
+              : "Error al guardar el libro. Por favor, inténtalo de nuevo.";
+            alert(errorMsg);
+            throw new Error(isLectureBook ? "Error al eliminar el libro" : "Error al guardar el libro");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          console.log(isLectureBook ? "Libro eliminado:" : "Libro guardado:", data);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    });
+  });
+</script>

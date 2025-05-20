@@ -1,8 +1,9 @@
 ---
-import type { Book } from "@/types/OpenLibraryTypes";
+import Bookmark from "@/components/books/Bookmark.astro";
+import type { Book, LectureBook } from "@/types/OpenLibraryTypes";
 
 interface Props {
-  book: Book;
+  book: Book | LectureBook;
   canOpenDialog?: boolean;
 }
 
@@ -29,38 +30,6 @@ const imageUrl = book.cover_i
   role="button"
   aria-label={`Book: ${displayTitle} by ${displayAuthors.join(", ")}`}
 >
-  {/* Bookmark Icon */}
-  <button
-    class="absolute top-0 right-0 z-10 -mt-1 cursor-pointer opacity-50 hover:opacity-100 focus:opacity-100 transition-opacity duration-300 ease-in-out"
-    aria-label="Bookmark this book"
-    data-book={JSON.stringify(book)}
-    id="bookmark-btn"
-  >
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="48"
-      height="48"
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      class="text-neutral-500 drop-shadow-md"
-    >
-      <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"></path>
-    </svg>
-  </button>
-
-  <div
-    class="absolute bottom-0 left-0 z-10 w-full bg-blue-800 opacity-0 group-hover:opacity-100 group-focus:opacity-100 transition-opacity duration-300 ease-in-out p-2"
-  >
-    <h3 class="text-sm font-semibold mb-1 text-balance line-clamp-3 text-white">
-      {displayTitle}
-    </h3>
-    <p class="text-xs text-gray-300 truncate">{displayAuthors.join(", ")}</p>
-  </div>
-
   {
     imageUrl ? (
       <img
@@ -81,39 +50,13 @@ const imageUrl = book.cover_i
       </div>
     )
   }
+  <div
+    class="absolute bottom-0 left-0 z-10 w-full bg-blue-800 opacity-0 group-hover:opacity-100 group-focus:opacity-100 transition-opacity duration-300 ease-in-out p-2"
+  >
+    <h3 class="text-sm font-semibold mb-1 text-balance line-clamp-3 text-white">
+      {displayTitle}
+    </h3>
+    <p class="text-xs text-gray-300 truncate">{displayAuthors.join(", ")}</p>
+  </div>
+  <Bookmark book={book} />
 </div>
-
-<script>
-  const bookmarkBtns = Array.from(document.querySelectorAll("#bookmark-btn")) as HTMLButtonElement[];
-  bookmarkBtns.forEach((btn) => {
-    btn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      const bookData = JSON.parse((e.currentTarget as HTMLButtonElement).dataset.book || "{}");
-      fetch("/api/lectureLists/main.json", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(bookData),
-      })
-        .then((response) => {
-          if (!response.ok) {
-            if (response.status === 401) {
-              // TODO: enhanced sugestion to improve user experience
-              alert("Por favor, inicia sesión para guardar libros en tu lista de lectura.");
-              throw new Error("Usuario no autenticado");
-            }
-            alert("Error al guardar el libro. Por favor, inténtalo de nuevo.");
-            throw new Error("Error al guardar el libro");
-          }
-          return response.json();
-        })
-        .then((data) => {
-          console.log("Libro guardado:", data);
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-        });
-    });
-  });
-</script>
