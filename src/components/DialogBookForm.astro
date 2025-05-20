@@ -193,11 +193,6 @@
 <!-- handle form submission to update lecture details -->
 <script>
   import { bookData, isOpen } from "@/store/bookDialog.store";
-  import {
-    updateBook,
-    removeBook,
-    getBookByISBN,
-  } from "@/store/lectureList.store";
 
   const form = document.querySelector("form") as HTMLFormElement;
   const inputPage = document.querySelector("#page") as HTMLInputElement;
@@ -207,16 +202,8 @@
   const removeBtn = document.querySelector(
     "button:last-child"
   ) as HTMLButtonElement;
-  const gridLectureList = document.querySelector(
-    ".grid-lecture-list"
-  ) as HTMLDivElement;
-  const gridAvailable = document.querySelector(
-    ".grid-available"
-  ) as HTMLDivElement;
-  const lectureListCount = document.querySelector("#number-lecture-list") as HTMLSpanElement;
-  const availableCount = document.querySelector("#number-available") as HTMLSpanElement;
 
-  form.addEventListener("submit", (e) => {
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const book = bookData.get();
     if (!book) return;
@@ -227,35 +214,32 @@
     book.liked = checkboxLiked.checked;
     book.mainNote = textareaNote.value;
 
-    // update book in lecture list store and save it to local storage
-    const updatedBooks = updateBook(book);
-    localStorage.setItem("lectureList", JSON.stringify(updatedBooks));
+    try {
+      // First update the book on the server if it has a lectureBookId
+      if (book.lectureBookId) {
+        const response = await fetch(`/api/lecture-book/${book.lectureBookId}.json`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            currentPage: book.currentPage,
+            readingStatus: book.readingStatus,
+            liked: book.liked,
+            mainNote: book.mainNote
+          }),
+        });
 
-    // close modal
-    isOpen.set(false);
+        if (!response.ok) {
+          console.error('Failed to update book on server:', await response.json());
+        }
+      }
+      
+      // close modal
+      isOpen.set(false);
+    } catch (error) {
+      console.error('Error updating book:', error);
+      // You could add error handling UI here
+    }
   });
-
-  removeBtn.addEventListener("click", () => {
-    const book = bookData.get();
-    if (!book || !book.isbn) return;
-    const isbn = book.isbn[0];
-    const books = removeBook(book);
-
-    localStorage.setItem("lectureList", JSON.stringify(books));
-
-    // close modal
-    isOpen.set(false);
-
-    // move card to the available list
-    moveCard(isbn);
-  });
-
-  const moveCard = (isbn: string) => {
-    const card = document.getElementById(`${isbn}`) as HTMLDivElement;
-    card.classList.remove("openDialog");
-    gridAvailable.appendChild(card);
-    // update the count
-    lectureListCount.textContent = `${+(lectureListCount.textContent ?? 0) - 1}`;
-    availableCount.textContent = `${+(availableCount.textContent ?? 0) + 1}`;
-  };
 </script>
